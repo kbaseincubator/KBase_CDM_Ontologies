@@ -37,7 +37,7 @@ make docker-run-large
 
 - Docker Engine 20.10+
 - Docker Compose v2.0+
-- 8GB RAM (test mode) or 1.5TB RAM (production mode)
+- 1.5TB+ available RAM for container allocation
 
 ### Setup
 
@@ -68,7 +68,7 @@ The pipeline consists of 7 sequential steps:
 
 ### Production Dataset (30+ ontologies)
 - Extended execution (hours to days)
-- Requires massive memory allocation
+- Same memory allocation as test mode
 - Uses `config/ontologies_source.txt`
 
 ## Output Structure
@@ -83,10 +83,12 @@ outputs_test/         # Test outputs (included as examples)
 
 ## Memory Requirements
 
-| Mode | Ontologies | RAM Required | Processing Time |
-|------|------------|--------------|-----------------|
-| Test | 6 | 8GB | ~10 minutes |
-| Small | 15 | 64GB | ~2 hours |
+All environments use production memory settings (1.5TB container limits) for consistency:
+
+| Mode | Ontologies | Container Memory | Processing Time |
+|------|------------|------------------|-----------------|
+| Test | 6 | 1.5TB | ~10 minutes |
+| Small | 15 | 1.5TB | ~2 hours |
 | Large | 30+ | 1.5TB | 24+ hours |
 
 ## Documentation
