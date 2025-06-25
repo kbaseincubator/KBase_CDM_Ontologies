@@ -1,0 +1,93 @@
+{
+  "cl-base.owl": {
+    "checksum": "e9ca380b0309c15da0504493ce96bfc7858b98adb3ae42f02626eee11c07b847",
+    "last_updated": "2025-06-25T15:55:46.920904",
+    "previous_checksum": "c6ae5e66b8ab9179594ce509b7713c4a5de167fd82c9e4772f04ac000b8e575b",
+    "size_bytes": 0,
+    "url": "http://purl.obolibrary.org/obo/cl/cl-base.owl",
+    "version_history": [
+      {
+        "checksum": "c6ae5e66b8ab9179594ce509b7713c4a5de167fd82c9e4772f04ac000b8e575b",
+        "replaced_on": "2025-06-25T15:55:46.920914"
+      }
+    ]
+  },
+  "go.owl": {
+    "checksum": "c73e50c94fe9cc3bd6b621e524aaad4669a09d7ad16cbcbddc14b7e6df8d6367",
+    "last_updated": "2025-06-25T15:56:07.388045",
+    "previous_checksum": "712f4f746ddac8e48410a52622c1e1d98c0e7e93e414ca4ad299b2310dd4b75d",
+    "size_bytes": 0,
+    "url": "https://purl.obolibrary.org/obo/go.owl",
+    "version_history": [
+      {
+        "checksum": "712f4f746ddac8e48410a52622c1e1d98c0e7e93e414ca4ad299b2310dd4b75d",
+        "replaced_on": "2025-06-25T15:56:07.388056"
+      }
+    ]
+  },
+  "ncbitaxon.owl": {
+    "checksum": "5238897945e50ceb9007a1f96f40d1e8774456c3a0d691292fe7e8e9b5b1287d",
+    "last_updated": "2025-06-25T15:57:45.102595",
+    "previous_checksum": "c9a2077a2322ddb67c6d86ff19aed4d9e4057061f77093d82becb7eb6a122e9f",
+    "size_bytes": 0,
+    "url": "https://purl.obolibrary.org/obo/ncbitaxon.owl",
+    "version_history": [
+      {
+        "checksum": "c9a2077a2322ddb67c6d86ff19aed4d9e4057061f77093d82becb7eb6a122e9f",
+        "replaced_on": "2025-06-25T15:57:45.103080"
+      }
+    ]
+  },
+  "obi-base.owl": {
+    "checksum": "522e516f77510dcb363dfbb4d4a21ec1449e7df241582f74e46a5144e5ff946a",
+    "last_updated": "2025-06-25T15:55:49.888410",
+    "previous_checksum": "d71aeb1fb2fc66bba22e0506d0868b95102d26bed899a7ddf7e68c60ab3a465b",
+    "size_bytes": 0,
+    "url": "http://purl.obolibrary.org/obo/obi/obi-base.owl",
+    "version_history": [
+      {
+        "checksum": "d71aeb1fb2fc66bba22e0506d0868b95102d26bed899a7ddf7e68c60ab3a465b",
+        "replaced_on": "2025-06-25T15:55:49.888421"
+      }
+    ]
+  },
+  "pato-base.owl": {
+    "checksum": "5a490426a99d490cb9de3a2a698f840d6ad679999544c10ba0f2925c1bbf0a64",
+    "last_updated": "2025-06-25T15:55:50.668332",
+    "previous_checksum": "0eb3ff456bb7e99a31a000ef37d58aeda4f8b15be8fffebf23047b90889d549e",
+    "size_bytes": 0,
+    "url": "http://purl.obolibrary.org/obo/pato/pato-base.owl",
+    "version_history": [
+      {
+        "checksum": "0eb3ff456bb7e99a31a000ef37d58aeda4f8b15be8fffebf23047b90889d549e",
+        "replaced_on": "2025-06-25T15:55:50.668343"
+      }
+    ]
+  },
+  "ro-base.owl": {
+    "checksum": "cba7d8111c554a00244a8f42d397074a2ad093cc659652c61497313a9611ed4a",
+    "last_updated": "2025-06-25T15:55:51.758359",
+    "previous_checksum": "d2749cee2a33db975d38dda734447f43af165be94b7303591e503e260823aac8",
+    "size_bytes": 0,
+    "url": "http://purl.obolibrary.org/obo/ro/ro-base.owl",
+    "version_history": [
+      {
+        "checksum": "d2749cee2a33db975d38dda734447f43af165be94b7303591e503e260823aac8",
+        "replaced_on": "2025-06-25T15:55:51.758368"
+      }
+    ]
+  },
+  "uberon-base.owl": {
+    "checksum": "c1110b3aef6511b7c8258bc3364ac337ff45a48c1d07786237f6ee3a7d1972df",
+    "last_updated": "2025-06-25T15:55:56.759878",
+    "previous_checksum": "c5c321caa4abfb40ac7f734154ff1207ada6cf1d2401879a2c3e7a5092a391ce",
+    "size_bytes": 0,
+    "url": "http://purl.obolibrary.org/obo/uberon/uberon-base.owl",
+    "version_history": [
+      {
+        "checksum": "c5c321caa4abfb40ac7f734154ff1207ada6cf1d2401879a2c3e7a5092a391ce",
+        "replaced_on": "2025-06-25T15:55:56.759889"
+      }
+    ]
+  }
+}

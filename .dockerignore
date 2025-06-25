@@ -1,0 +1,49 @@
+# Git files
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info
+dist
+build
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Output files (will be generated)
+outputs/
+logs/
+*.log
+
+# Downloaded ontologies (will be downloaded fresh)
+ontology_data_owl/*.owl
+ontology_data_owl/non-base-ontologies/*.owl
+
+# Environment files (will be mounted)
+.env*
+
+# Documentation
+*.md
+docs/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Kubernetes files (not needed in container)
+k8s/
+
+# GitHub files
+.github/

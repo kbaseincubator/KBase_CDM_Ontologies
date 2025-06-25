@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cdm-ontologies-config
+  namespace: cdm-ontologies
+data:
+  # Java memory settings for production
+  ROBOT_JAVA_ARGS: "-Xmx900g"
+  _JAVA_OPTIONS: "-Xmx900g"
+  
+  # Dataset configuration
+  DATASET_SIZE: "large"
+  ONTOLOGIES_TO_MERGE: "all"
+  
+  # Processing options
+  ENABLE_REASONING: "true"
+  ENABLE_MATERIALIZATION: "true"
+  MAX_ONTOLOGY_SIZE_MB: "50000"
+  
+  # Performance tuning
+  PARALLEL_DOWNLOADS: "10"
+  BATCH_SIZE: "100"
+  
+  # Memory monitoring
+  MONITOR_MEMORY: "true"
+  MEMORY_LOG_INTERVAL: "60"

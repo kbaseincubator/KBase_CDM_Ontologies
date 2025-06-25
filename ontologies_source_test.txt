@@ -1,0 +1,18 @@
+# Test configuration with 6 ontologies covering all pipeline aspects
+# Using only ontologies from the main ontologies_source.txt file
+# Avoiding large ontologies like NCBI Taxon for faster testing
+
+#Core closure ontologies non base version (smaller ones)
+http://purl.obolibrary.org/obo/bfo.owl
+http://purl.obolibrary.org/obo/iao.owl
+
+
+#Core closure ontologies -base version (essential relationships)
+http://purl.obolibrary.org/obo/ro/ro-base.owl
+http://purl.obolibrary.org/obo/pato/pato-base.owl
+
+#Core Ontologies from OBO Foundry (moderate size, avoid ncbitaxon)
+https://purl.obolibrary.org/obo/envo.owl
+
+#PyOBO Controlled Vocabularies (small, manageable)
+https://w3id.org/biopragmatics/resources/credit/credit.owl

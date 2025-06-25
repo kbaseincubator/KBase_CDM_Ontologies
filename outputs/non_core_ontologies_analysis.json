@@ -1,0 +1,449 @@
+[
+  {
+    "file_name": "bfo.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/bfo.owl",
+    "own_terms_count": 37,
+    "external_terms_count": 21,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/IAO_0000111",
+      "http://purl.obolibrary.org/obo/IAO_0000112",
+      "http://purl.obolibrary.org/obo/IAO_0000115",
+      "http://purl.obolibrary.org/obo/IAO_0000116",
+      "http://purl.obolibrary.org/obo/IAO_0000117"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/BFO_0000001",
+      "http://purl.obolibrary.org/obo/BFO_0000002",
+      "http://purl.obolibrary.org/obo/BFO_0000003",
+      "http://purl.obolibrary.org/obo/BFO_0000004",
+      "http://purl.obolibrary.org/obo/BFO_0000006"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/IAO_0000111",
+      "http://purl.obolibrary.org/obo/IAO_0000112",
+      "http://purl.obolibrary.org/obo/IAO_0000115",
+      "http://purl.obolibrary.org/obo/IAO_0000116",
+      "http://purl.obolibrary.org/obo/IAO_0000117"
+    ]
+  },
+  {
+    "file_name": "credit.owl",
+    "has_imports": false,
+    "ontology_iri": "https://w3id.org/biopragmatics/resources/credit/credit.ofn",
+    "own_terms_count": 0,
+    "external_terms_count": 19,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "https://credit.niso.org/contributor-roles/conceptualization",
+      "https://credit.niso.org/contributor-roles/data-curation",
+      "https://credit.niso.org/contributor-roles/formal-analysis",
+      "https://credit.niso.org/contributor-roles/funding-acquisition",
+      "https://credit.niso.org/contributor-roles/investigation"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.org/dc/terms/description",
+      "http://purl.org/dc/terms/license",
+      "http://purl.org/dc/terms/title",
+      "http://www.geneontology.org/formats/oboInOwl#auto-generated-by",
+      "https://credit.niso.org/contributor-roles/conceptualization"
+    ]
+  },
+  {
+    "file_name": "eccode.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/eccode.owl",
+    "own_terms_count": 0,
+    "external_terms_count": 249359,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/IAO_0100001",
+      "http://purl.obolibrary.org/obo/RO_0002327",
+      "http://purl.obolibrary.org/obo/RO_0002351",
+      "http://purl.obolibrary.org/obo/eccode.owl",
+      "http://www.geneontology.org/formats/oboInOwl#hasExactSynonym"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/GO_0000010",
+      "http://purl.obolibrary.org/obo/GO_0000016",
+      "http://purl.obolibrary.org/obo/GO_0000034",
+      "http://purl.obolibrary.org/obo/GO_0000048",
+      "http://purl.obolibrary.org/obo/GO_0000121"
+    ]
+  },
+  {
+    "file_name": "foodon.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/foodon.owl",
+    "own_terms_count": 28888,
+    "external_terms_count": 10979,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/AGRO_00000025",
+      "http://purl.obolibrary.org/obo/AGRO_00000322",
+      "http://purl.obolibrary.org/obo/AGRO_00000360",
+      "http://purl.obolibrary.org/obo/AGRO_00000363",
+      "http://purl.obolibrary.org/obo/AGRO_00002071"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/FOODON_00000000",
+      "http://purl.obolibrary.org/obo/FOODON_00000015",
+      "http://purl.obolibrary.org/obo/FOODON_00000070",
+      "http://purl.obolibrary.org/obo/FOODON_00000071",
+      "http://purl.obolibrary.org/obo/FOODON_00000072"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/AGRO_00000025",
+      "http://purl.obolibrary.org/obo/AGRO_00000322",
+      "http://purl.obolibrary.org/obo/AGRO_00000360",
+      "http://purl.obolibrary.org/obo/AGRO_00000363",
+      "http://purl.obolibrary.org/obo/AGRO_00002071"
+    ]
+  },
+  {
+    "file_name": "gtdb.owl",
+    "has_imports": false,
+    "ontology_iri": "https://w3id.org/biopragmatics/resources/gtdb/gtdb.ofn",
+    "own_terms_count": 0,
+    "external_terms_count": 146394,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/IAO_0000700",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000001",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000002",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000003",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000004"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/IAO_0000700",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000001",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000002",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000003",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000004"
+    ]
+  },
+  {
+    "file_name": "iao.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/iao.owl",
+    "own_terms_count": 283,
+    "external_terms_count": 130,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000008",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000032",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000033",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000522",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000524"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/IAO_0000001",
+      "http://purl.obolibrary.org/obo/IAO_0000002",
+      "http://purl.obolibrary.org/obo/IAO_0000003",
+      "http://purl.obolibrary.org/obo/IAO_0000004",
+      "http://purl.obolibrary.org/obo/IAO_0000005"
+    ],
+    "external_terms": [
+      "http://protege.stanford.edu/plugins/owl/protege#defaultLanguage",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000008",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000032",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000033",
+      "http://purl.obolibrary.org/obo/APOLLO_SV_00000522"
+    ]
+  },
+  {
+    "file_name": "interpro.owl",
+    "has_imports": false,
+    "ontology_iri": "https://w3id.org/biopragmatics/resources/interpro/interpro.ofn",
+    "own_terms_count": 0,
+    "external_terms_count": 52757,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/IPR_IPR000001",
+      "http://purl.obolibrary.org/obo/IPR_IPR000003",
+      "http://purl.obolibrary.org/obo/IPR_IPR000006",
+      "http://purl.obolibrary.org/obo/IPR_IPR000007",
+      "http://purl.obolibrary.org/obo/IPR_IPR000008"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/GO_0000001",
+      "http://purl.obolibrary.org/obo/GO_0000002",
+      "http://purl.obolibrary.org/obo/GO_0000009",
+      "http://purl.obolibrary.org/obo/GO_0000011",
+      "http://purl.obolibrary.org/obo/GO_0000012"
+    ]
+  },
+  {
+    "file_name": "ogms.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/ogms.owl",
+    "own_terms_count": 118,
+    "external_terms_count": 146,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/BFO_0000001",
+      "http://purl.obolibrary.org/obo/BFO_0000002",
+      "http://purl.obolibrary.org/obo/BFO_0000003",
+      "http://purl.obolibrary.org/obo/BFO_0000004",
+      "http://purl.obolibrary.org/obo/BFO_0000006"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/OGMS_0000014",
+      "http://purl.obolibrary.org/obo/OGMS_0000015",
+      "http://purl.obolibrary.org/obo/OGMS_0000016",
+      "http://purl.obolibrary.org/obo/OGMS_0000017",
+      "http://purl.obolibrary.org/obo/OGMS_0000018"
+    ],
+    "external_terms": [
+      "http://protege.stanford.edu/plugins/owl/protege#defaultLanguage",
+      "http://purl.obolibrary.org/obo/BFO_0000001",
+      "http://purl.obolibrary.org/obo/BFO_0000002",
+      "http://purl.obolibrary.org/obo/BFO_0000003",
+      "http://purl.obolibrary.org/obo/BFO_0000004"
+    ]
+  },
+  {
+    "file_name": "omo.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/omo.owl",
+    "own_terms_count": 19,
+    "external_terms_count": 107,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/IAO_0000002",
+      "http://purl.obolibrary.org/obo/IAO_0000027",
+      "http://purl.obolibrary.org/obo/IAO_0000030",
+      "http://purl.obolibrary.org/obo/IAO_0000078",
+      "http://purl.obolibrary.org/obo/IAO_0000102"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/OMO_0001000",
+      "http://purl.obolibrary.org/obo/OMO_0001001",
+      "http://purl.obolibrary.org/obo/OMO_0001002",
+      "http://purl.obolibrary.org/obo/OMO_0002000",
+      "http://purl.obolibrary.org/obo/OMO_0002001"
+    ],
+    "external_terms": [
+      "http://protege.stanford.edu/plugins/owl/protege#defaultLanguage",
+      "http://purl.obolibrary.org/obo/IAO_0000002",
+      "http://purl.obolibrary.org/obo/IAO_0000027",
+      "http://purl.obolibrary.org/obo/IAO_0000030",
+      "http://purl.obolibrary.org/obo/IAO_0000078"
+    ]
+  },
+  {
+    "file_name": "pfam.owl",
+    "has_imports": false,
+    "ontology_iri": "https://w3id.org/biopragmatics/resources/pfam/pfam.ofn",
+    "own_terms_count": 0,
+    "external_terms_count": 24850,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "https://w3id.org/biopragmatics/resources/pfam/pfam.ofn",
+      "https://www.ebi.ac.uk/interpro/entry/pfam/PF00001",
+      "https://www.ebi.ac.uk/interpro/entry/pfam/PF00002",
+      "https://www.ebi.ac.uk/interpro/entry/pfam/PF00003",
+      "https://www.ebi.ac.uk/interpro/entry/pfam/PF00004"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.org/dc/terms/description",
+      "http://purl.org/dc/terms/license",
+      "http://purl.org/dc/terms/title",
+      "http://www.geneontology.org/formats/oboInOwl#auto-generated-by",
+      "https://w3id.org/biopragmatics/resources/pfam/pfam.ofn"
+    ]
+  },
+  {
+    "file_name": "po.owl",
+    "has_imports": true,
+    "ontology_iri": "http://purl.obolibrary.org/obo/po.owl",
+    "own_terms_count": 1996,
+    "external_terms_count": 67,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/BFO_0000050",
+      "http://purl.obolibrary.org/obo/BFO_0000051",
+      "http://purl.obolibrary.org/obo/BFO_0000062",
+      "http://purl.obolibrary.org/obo/BFO_0000063",
+      "http://purl.obolibrary.org/obo/IAO_0000115"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/PO_0000001",
+      "http://purl.obolibrary.org/obo/PO_0000002",
+      "http://purl.obolibrary.org/obo/PO_0000003",
+      "http://purl.obolibrary.org/obo/PO_0000004",
+      "http://purl.obolibrary.org/obo/PO_0000005"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/BFO_0000050",
+      "http://purl.obolibrary.org/obo/BFO_0000051",
+      "http://purl.obolibrary.org/obo/BFO_0000062",
+      "http://purl.obolibrary.org/obo/BFO_0000063",
+      "http://purl.obolibrary.org/obo/IAO_0000115"
+    ]
+  },
+  {
+    "file_name": "rhea.owl",
+    "has_imports": false,
+    "ontology_iri": "https://w3id.org/biopragmatics/resources/rhea/rhea.ofn",
+    "own_terms_count": 0,
+    "external_terms_count": 324997,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/RO#reactionEnabledByMolecularFunction",
+      "http://purl.obolibrary.org/obo/RO_0000056",
+      "http://purl.obolibrary.org/obo/RO_0000057",
+      "http://purl.obolibrary.org/obo/RO_0002233",
+      "http://purl.obolibrary.org/obo/RO_0002234"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/CHEBI_100",
+      "http://purl.obolibrary.org/obo/CHEBI_10015",
+      "http://purl.obolibrary.org/obo/CHEBI_10023",
+      "http://purl.obolibrary.org/obo/CHEBI_10036",
+      "http://purl.obolibrary.org/obo/CHEBI_10106"
+    ]
+  },
+  {
+    "file_name": "ror.owl",
+    "has_imports": false,
+    "ontology_iri": "https://w3id.org/biopragmatics/resources/ror/ror.ofn",
+    "own_terms_count": 0,
+    "external_terms_count": 122648,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/BFO_0000050",
+      "http://purl.obolibrary.org/obo/BFO_0000051",
+      "http://purl.obolibrary.org/obo/BFO_0000062",
+      "http://purl.obolibrary.org/obo/BFO_0000063",
+      "http://purl.obolibrary.org/obo/ENVO_00000856"
+    ],
+    "own_terms": [],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/BFO_0000050",
+      "http://purl.obolibrary.org/obo/BFO_0000051",
+      "http://purl.obolibrary.org/obo/BFO_0000062",
+      "http://purl.obolibrary.org/obo/BFO_0000063",
+      "http://purl.obolibrary.org/obo/ENVO_00000856"
+    ]
+  },
+  {
+    "file_name": "so.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/so.owl",
+    "own_terms_count": 2639,
+    "external_terms_count": 190,
+    "classification": "Potential Base (missing -base hint in .owl file name). No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/BS_00003",
+      "http://purl.obolibrary.org/obo/BS_0000338",
+      "http://purl.obolibrary.org/obo/BS_0000339",
+      "http://purl.obolibrary.org/obo/BS_0000340",
+      "http://purl.obolibrary.org/obo/BS_0000341"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/SO_0000000",
+      "http://purl.obolibrary.org/obo/SO_0000001",
+      "http://purl.obolibrary.org/obo/SO_0000002",
+      "http://purl.obolibrary.org/obo/SO_0000003",
+      "http://purl.obolibrary.org/obo/SO_0000004"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/BS_00003",
+      "http://purl.obolibrary.org/obo/BS_0000338",
+      "http://purl.obolibrary.org/obo/BS_0000339",
+      "http://purl.obolibrary.org/obo/BS_0000340",
+      "http://purl.obolibrary.org/obo/BS_0000341"
+    ]
+  },
+  {
+    "file_name": "taxrank.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/taxrank.owl",
+    "own_terms_count": 74,
+    "external_terms_count": 15,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/IAO_0000112",
+      "http://purl.obolibrary.org/obo/IAO_0000115",
+      "http://purl.obolibrary.org/obo/IAO_0000700",
+      "http://purl.obolibrary.org/obo/taxrank.owl",
+      "http://www.geneontology.org/formats/oboInOwl#created_by"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/TAXRANK_0000000",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000001",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000002",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000003",
+      "http://purl.obolibrary.org/obo/TAXRANK_0000004"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/IAO_0000112",
+      "http://purl.obolibrary.org/obo/IAO_0000115",
+      "http://purl.obolibrary.org/obo/IAO_0000700",
+      "http://purl.obolibrary.org/obo/taxrank.owl",
+      "http://purl.org/dc/terms/contributor"
+    ]
+  },
+  {
+    "file_name": "uo.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/uo.owl",
+    "own_terms_count": 572,
+    "external_terms_count": 5,
+    "classification": "Potential Base (missing -base hint in .owl file name). No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/uo.owl"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/UO_0000000",
+      "http://purl.obolibrary.org/obo/UO_0000001",
+      "http://purl.obolibrary.org/obo/UO_0000002",
+      "http://purl.obolibrary.org/obo/UO_0000003",
+      "http://purl.obolibrary.org/obo/UO_0000004"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/has_prefix",
+      "http://purl.obolibrary.org/obo/is_unit_of",
+      "http://purl.obolibrary.org/obo/uo.owl",
+      "http://www.geneontology.org/formats/oboInOwl#hasExactSynonym",
+      "http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym"
+    ]
+  },
+  {
+    "file_name": "upheno.owl",
+    "has_imports": false,
+    "ontology_iri": "http://purl.obolibrary.org/obo/upheno.owl",
+    "own_terms_count": 52987,
+    "external_terms_count": 139034,
+    "classification": "Non-Base. No -base version available in OBO Foundry",
+    "external_terms_as_subjects": [
+      "http://purl.obolibrary.org/obo/APO_0000017",
+      "http://purl.obolibrary.org/obo/APO_0000022",
+      "http://purl.obolibrary.org/obo/APO_0000023",
+      "http://purl.obolibrary.org/obo/APO_0000024",
+      "http://purl.obolibrary.org/obo/APO_0000025"
+    ],
+    "own_terms": [
+      "http://purl.obolibrary.org/obo/UPHENO_0000001",
+      "http://purl.obolibrary.org/obo/UPHENO_0000002",
+      "http://purl.obolibrary.org/obo/UPHENO_0000003",
+      "http://purl.obolibrary.org/obo/UPHENO_0000507",
+      "http://purl.obolibrary.org/obo/UPHENO_0000508"
+    ],
+    "external_terms": [
+      "http://purl.obolibrary.org/obo/APO_0000017",
+      "http://purl.obolibrary.org/obo/APO_0000022",
+      "http://purl.obolibrary.org/obo/APO_0000023",
+      "http://purl.obolibrary.org/obo/APO_0000024",
+      "http://purl.obolibrary.org/obo/APO_0000025"
+    ]
+  }
+]

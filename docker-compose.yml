@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  cdm-ontologies:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kbase-cdm-ontologies:latest
+    container_name: cdm-ontologies-pipeline
+    user: "502:20"  # Match host user UID:GID to avoid permission issues
+    env_file:
+      - ${ENV_FILE:-.env}
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Mount the entire workspace
+      - ./:/home/ontology/workspace
+      # Separate volume for outputs to avoid conflicts
+      - cdm-outputs:/home/ontology/workspace/outputs
+      # Cache directory for downloaded ontologies
+      - cdm-cache:/home/ontology/.cache
+    working_dir: /home/ontology/workspace
+    command: make run-workflow
+    # Ultra-high memory limits for 680GB+ peak dataset processing
+    deploy:
+      resources:
+        limits:
+          memory: 1536G  # 1.5TB for 680GB+ peak usage with headroom
+        reservations:
+          memory: 512G
+    # Uncomment for interactive debugging
+    # stdin_open: true
+    # tty: true
+    # entrypoint: /bin/bash
+
+  # Optional: Jupyter notebook for interactive analysis
+  notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kbase-cdm-ontologies:latest
+    container_name: cdm-ontologies-notebook
+    user: "502:20"  # Match host user UID:GID to avoid permission issues
+    env_file:
+      - ${ENV_FILE:-.env}
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/home/ontology/workspace
+      - cdm-outputs:/home/ontology/workspace/outputs
+      - cdm-cache:/home/ontology/.cache
+    working_dir: /home/ontology/workspace
+    command: >
+      bash -c "pip install --user notebook &&
+               python -m notebook --ip=0.0.0.0 --no-browser --allow-root"
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+
+volumes:
+  cdm-outputs:
+  cdm-cache:

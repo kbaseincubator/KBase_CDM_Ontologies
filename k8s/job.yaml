@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cdm-ontologies-pipeline
+  namespace: cdm-ontologies
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 259200  # 72 hours timeout
+  template:
+    metadata:
+      labels:
+        app: cdm-ontologies
+    spec:
+      restartPolicy: OnFailure
+      
+      # Node selector for high-memory nodes
+      nodeSelector:
+        node-type: highmem
+        
+      # Tolerations for dedicated nodes
+      tolerations:
+      - key: "workload-type"
+        operator: "Equal"
+        value: "memory-intensive"
+        effect: "NoSchedule"
+        
+      containers:
+      - name: cdm-ontologies
+        image: kbase-cdm-ontologies:latest
+        imagePullPolicy: Always
+        
+        command: ["make", "run-workflow"]
+        
+        envFrom:
+        - configMapRef:
+            name: cdm-ontologies-config
+            
+        resources:
+          requests:
+            memory: "900Gi"
+            cpu: "32"
+            ephemeral-storage: "100Gi"
+          limits:
+            memory: "1200Gi"  # 1.2TB limit
+            cpu: "64"
+            ephemeral-storage: "200Gi"
+            
+        volumeMounts:
+        - name: data
+          mountPath: /home/ontology/workspace/outputs
+        - name: cache
+          mountPath: /home/ontology/.cache
+        - name: tmpdir
+          mountPath: /tmp
+          
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: cdm-ontologies-data
+      - name: cache
+        persistentVolumeClaim:
+          claimName: cdm-ontologies-cache
+      - name: tmpdir
+        emptyDir:
+          sizeLimit: 200Gi

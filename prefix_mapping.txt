@@ -1,0 +1,15 @@
+
+# External resources
+credit: https://credit.niso.org/contributor-roles/
+Pfam: https://www.ebi.ac.uk/interpro/entry/pfam/
+Pfam.clan: https://www.ebi.ac.uk/interpro/set/pfam/
+GTDB: https://gtdb.ecogenomic.org/tree?r=
+InterPro: https://www.ebi.ac.uk/interpro/entry/InterPro/
+ROR: https://ror.org/
+EC: https://bioregistry.io/eccode:
+RHEA: https://www.rhea-db.org/rhea/
+UniProt: https://bioregistry.io/uniprot:
+MetaCyc.pathway: http://purl.obolibrary.org/obo/metacyc.pathway_
+Seed.compound: http://purl.obolibrary.org/obo/seed.compound_
+Seed.reaction: http://purl.obolibrary.org/obo/seed.reaction_
+KEGG.rn: http://purl.obolibrary.org/obo/kegg_

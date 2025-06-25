@@ -1,0 +1,92 @@
+# Ontology data directories (populated during pipeline runs)
+ontology_data_owl/
+!ontology_data_owl_test/  # Keep test data for demonstration
+
+# Output directories
+outputs/
+!outputs_test/  # Keep test outputs for demonstration
+
+# Claude guidance file (user-specific)
+CLAUDE.md
+
+# Large ontology files
+ontology_versions/backups/*.owl
+*.owl
+!*_test.owl
+
+# Large compressed files
+*.gz
+*.tar
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs (but keep important logs like download_history.log)
+logs/*.log
+!logs/.gitkeep
+*.log
+!ontology_versions*/download_history.log
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/

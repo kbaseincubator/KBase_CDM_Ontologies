@@ -1,0 +1,13 @@
+# Core dependencies
+pandas>=2.0.0
+requests>=2.31.0
+rdflib>=7.0.0
+
+# Ontology processing
+semsql>=0.3.2
+oaklib>=0.5.20
+
+# Optional but useful
+tqdm>=4.65.0  # Progress bars
+psutil>=5.9.0  # Memory monitoring
+pyarrow>=14.0.0  # For parquet support
