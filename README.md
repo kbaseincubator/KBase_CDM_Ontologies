@@ -49,13 +49,15 @@ make docker-build
 
 ## Pipeline Architecture
 
-The pipeline consists of 5 sequential steps:
+The pipeline consists of 7 sequential steps:
 
 1. **Analyze Core Ontologies** - Downloads and processes primary ontologies
-2. **Analyze Non-Core Ontologies** - Processes additional OBO ontologies
-3. **Merge Ontologies** - Combines all ontologies using ROBOT
-4. **Create Semantic SQL Database** - Converts to queryable SQLite format
-5. **Extract Tables** - Exports database tables to TSV/Parquet
+2. **Analyze Non-Core Ontologies** - Processes additional OBO ontologies  
+3. **Create Pseudo Base Ontologies** - Creates base versions using ROBOT
+4. **Merge Ontologies** - Combines all ontologies using ROBOT
+5. **Create Semantic SQL Database** - Converts to queryable SQLite format
+6. **Extract Tables to TSV** - Exports database tables to TSV format
+7. **Create Parquet Files** - Compresses data to efficient Parquet format
 
 ## Configuration
 
