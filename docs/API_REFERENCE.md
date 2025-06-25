@@ -52,7 +52,7 @@ python -m cdm_ontologies analyze-core [OPTIONS]
 
 **Example:**
 ```bash
-python -m cdm_ontologies analyze-core --parallel 10 --source-file ontologies_source_test.txt
+python -m cdm_ontologies analyze-core --parallel 10 --source-file config/ontologies_source_test.txt
 ```
 
 ##### `analyze-non-core`
@@ -172,7 +172,7 @@ make help                  # Show all available targets
 Show current version status of all ontologies
 
 ```bash
-python version_manager.py status [OPTIONS]
+python scripts/version_manager.py status [OPTIONS]
 ```
 
 **Options:**
@@ -182,14 +182,14 @@ python version_manager.py status [OPTIONS]
 
 **Example:**
 ```bash
-python version_manager.py status --format json --filter outdated
+python scripts/version_manager.py status --format json --filter outdated
 ```
 
 #### `report`
 Generate detailed version report
 
 ```bash
-python version_manager.py report [OPTIONS]
+python scripts/version_manager.py report [OPTIONS]
 ```
 
 **Options:**
@@ -199,14 +199,14 @@ python version_manager.py report [OPTIONS]
 
 **Example:**
 ```bash
-python version_manager.py report --output version_report.md --include-history
+python scripts/version_manager.py report --output version_report.md --include-history
 ```
 
 #### `validate`
 Validate file checksums and integrity
 
 ```bash
-python version_manager.py validate [OPTIONS]
+python scripts/version_manager.py validate [OPTIONS]
 ```
 
 **Options:**
@@ -216,14 +216,14 @@ python version_manager.py validate [OPTIONS]
 
 **Example:**
 ```bash
-python version_manager.py validate --verbose --ontology bfo.owl
+python scripts/version_manager.py validate --verbose --ontology bfo.owl
 ```
 
 #### `history`
 Show download history
 
 ```bash
-python version_manager.py history [OPTIONS]
+python scripts/version_manager.py history [OPTIONS]
 ```
 
 **Options:**
@@ -234,14 +234,14 @@ python version_manager.py history [OPTIONS]
 
 **Example:**
 ```bash
-python version_manager.py history --limit 20 --since 2025-06-01
+python scripts/version_manager.py history --limit 20 --since 2025-06-01
 ```
 
 #### `clean`
 Clean old backup files
 
 ```bash
-python version_manager.py clean [OPTIONS]
+python scripts/version_manager.py clean [OPTIONS]
 ```
 
 **Options:**
@@ -252,26 +252,26 @@ python version_manager.py clean [OPTIONS]
 
 **Example:**
 ```bash
-python version_manager.py clean --keep 5 --dry-run
+python scripts/version_manager.py clean --keep 5 --dry-run
 ```
 
 #### `force-update`
 Force update specific ontologies
 
 ```bash
-python version_manager.py force-update ONTOLOGY [ONTOLOGY ...]
+python scripts/version_manager.py force-update ONTOLOGY [ONTOLOGY ...]
 ```
 
 **Example:**
 ```bash
-python version_manager.py force-update bfo.owl iao.owl
+python scripts/version_manager.py force-update bfo.owl iao.owl
 ```
 
 #### `check-updates`
 Check for available updates
 
 ```bash
-python version_manager.py check-updates [OPTIONS]
+python scripts/version_manager.py check-updates [OPTIONS]
 ```
 
 **Options:**
@@ -281,46 +281,8 @@ python version_manager.py check-updates [OPTIONS]
 
 **Example:**
 ```bash
-python version_manager.py check-updates --exit-code --threshold 1
+python scripts/version_manager.py check-updates --exit-code --threshold 1
 ```
-
-## Validation CLI
-
-### Commands
-
-#### `all`
-Run complete validation suite
-
-```bash
-python test_validation.py all [OPTIONS]
-```
-
-**Options:**
-- `--verbose`: Show detailed validation results
-- `--strict`: Fail on warnings as well as errors
-
-#### `<step_number>`
-Validate specific pipeline step
-
-```bash
-python test_validation.py 1    # Validate step 1 (analyze-core)
-python test_validation.py 2    # Validate step 2 (analyze-non-core)
-python test_validation.py 3    # Validate step 3 (create-base)
-python test_validation.py 4    # Validate step 4 (merge)
-python test_validation.py 5    # Validate step 5 (create-db)
-python test_validation.py 6    # Validate step 6 (extract-tables)
-```
-
-#### `version`
-Validate version tracking system
-
-```bash
-python test_validation.py version [OPTIONS]
-```
-
-**Options:**
-- `--check-backups`: Validate backup files
-- `--verify-checksums`: Verify all checksums
 
 ## Python API
 
@@ -503,7 +465,7 @@ The pipeline uses standard exit codes:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ONTOLOGIES_SOURCE_FILE` | Path to ontology source file | `ontologies_source.txt` |
+| `ONTOLOGIES_SOURCE_FILE` | Path to ontology source file | `config/ontologies_source.txt` |
 | `DATASET_SIZE` | Dataset size (test/small/large) | `small` |
 | `ROBOT_JAVA_ARGS` | Java arguments for ROBOT | `-Xmx16g` |
 | `PARALLEL_DOWNLOADS` | Concurrent downloads | `10` |

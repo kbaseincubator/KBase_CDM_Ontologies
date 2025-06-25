@@ -99,7 +99,7 @@ outputs_test/         # Test outputs (included as examples)
 
 ```bash
 # Run complete workflow
-python -m cdm_ontologies run-workflow --env-file .env.test
+python -m cdm_ontologies run-workflow
 
 # Run individual steps
 python -m cdm_ontologies analyze-core
@@ -108,6 +108,10 @@ python -m cdm_ontologies create-db
 
 # Check pipeline status
 python -m cdm_ontologies status
+
+# Version management
+python scripts/version_manager.py status
+python scripts/version_manager.py history
 ```
 
 ## External Tools

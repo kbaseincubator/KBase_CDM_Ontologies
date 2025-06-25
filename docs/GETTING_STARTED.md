@@ -57,10 +57,10 @@ The pipeline includes a curated test dataset with 9 ontologies:
 
 ```bash
 # View the test ontologies
-cat ontologies_source_test.txt
+cat config/ontologies_source_test.txt
 
 # See available commands
-./run_test.sh
+make help
 ```
 
 ### Step 2: Run a Single Step
@@ -69,11 +69,8 @@ cat ontologies_source_test.txt
 # Download and analyze test ontologies
 make test-analyze-core
 
-# Validate the results
-python test_validation.py 1
-
 # Check version tracking
-python version_manager.py status
+python scripts/version_manager.py status
 ```
 
 ### Step 3: Run Complete Test Workflow
@@ -82,8 +79,8 @@ python version_manager.py status
 # Run all pipeline steps with test data
 make test-workflow
 
-# Validate all outputs
-python test_validation.py all
+# Check final status
+python scripts/version_manager.py status
 ```
 
 ## Understanding the Output

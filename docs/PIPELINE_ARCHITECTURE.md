@@ -292,7 +292,7 @@ class CDMOntologiesCLI:
 ```python
 def detect_environment():
     """Detect test vs production environment"""
-    source_file = os.getenv('ONTOLOGIES_SOURCE_FILE', 'ontologies_source.txt')
+    source_file = os.getenv('ONTOLOGIES_SOURCE_FILE', 'config/ontologies_source.txt')
     
     if 'test' in source_file:
         return {

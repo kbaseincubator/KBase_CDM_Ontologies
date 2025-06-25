@@ -20,7 +20,7 @@ ROBOT_JAVA_ARGS=-Xmx32g           # Java heap size for ROBOT
 _JAVA_OPTIONS=-Xmx32g             # Global Java memory limit
 
 # Dataset Control
-ONTOLOGIES_SOURCE_FILE=ontologies_source.txt    # Source ontology list
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source.txt    # Source ontology list
 DATASET_SIZE=small                               # Size configuration
 
 # Processing Options
@@ -92,7 +92,7 @@ export ROBOT_JAVA_ARGS="-Xmx800g \
 
 ### Ontology Source Files
 
-#### Core Ontologies (`ontologies_source.txt`)
+#### Core Ontologies (`config/ontologies_source.txt`)
 
 ```
 # Format: ontology_id|url|description
@@ -101,7 +101,7 @@ iao|http://purl.obolibrary.org/obo/iao.owl|Information Artifact Ontology
 uo|http://purl.obolibrary.org/obo/uo.owl|Units of Measurement Ontology
 ```
 
-#### Test Ontologies (`ontologies_source_test.txt`)
+#### Test Ontologies (`config/ontologies_source_test.txt`)
 
 ```
 # Curated subset for testing
@@ -118,7 +118,7 @@ credit|https://w3id.org/biopragmatics/resources/credit/credit.owl|Credit Ontolog
 
 ### Merge Configuration
 
-#### Merge Groups (`ontologies_merged.txt`)
+#### Merge Groups (`config/ontologies_merged.txt`)
 
 ```
 # Group 1: Core ontologies
@@ -263,7 +263,7 @@ Create `.env.test`:
 
 ```bash
 # Test Environment Configuration
-ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt
 DATASET_SIZE=test
 
 # Memory (conservative for testing)
@@ -312,7 +312,7 @@ Create `.env.large`:
 
 ```bash
 # Large Production Configuration
-ONTOLOGIES_SOURCE_FILE=ontologies_source.txt
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source.txt
 DATASET_SIZE=large
 
 # Memory (aggressive)

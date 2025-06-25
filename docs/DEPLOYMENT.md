@@ -53,7 +53,7 @@ ROBOT_JAVA_ARGS=-Xmx800g
 _JAVA_OPTIONS=-Xmx800g
 
 # Dataset Configuration
-ONTOLOGIES_SOURCE_FILE=ontologies_source.txt
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source.txt
 DATASET_SIZE=large
 
 # Performance Tuning
@@ -427,13 +427,13 @@ cp outputs/*.db /backup/databases/
 
 ```bash
 # Check for ontology updates
-python version_manager.py status
+python scripts/version_manager.py status
 
 # Update only changed ontologies
 make analyze-core
 
 # Full pipeline if updates detected
-if python version_manager.py check-updates; then
+if python scripts/version_manager.py check-updates; then
     make run-workflow
 fi
 ```
@@ -442,7 +442,7 @@ fi
 
 ```bash
 # Clean old version backups (keep 30 days)
-python version_manager.py clean --days 30
+python scripts/version_manager.py clean --days 30
 
 # Clean temporary files
 make clean
@@ -470,7 +470,7 @@ ENV_FILE=.env.small make run-workflow
 
 ```bash
 # Check download history for failures
-python version_manager.py history | grep FAILED
+python scripts/version_manager.py history | grep FAILED
 
 # Test connectivity to ontology sources
 curl -I http://purl.obolibrary.org/obo/bfo.owl

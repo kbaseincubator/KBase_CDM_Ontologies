@@ -66,7 +66,7 @@ The `download_history.log` provides a complete audit trail:
 
 ```bash
 # Show status of all tracked ontologies
-python version_manager.py status
+python scripts/version_manager.py status
 
 # Example output:
 # 📊 Ontology Version Status (TEST mode)
@@ -81,7 +81,7 @@ python version_manager.py status
 
 ```bash
 # Check all files match their stored checksums
-python version_manager.py validate
+python scripts/version_manager.py validate
 
 # Example output:
 # 🔍 Validating 9 ontology files...
@@ -94,20 +94,20 @@ python version_manager.py validate
 
 ```bash
 # Show complete download history
-python version_manager.py history
+python scripts/version_manager.py history
 
 # Show only recent entries
-python version_manager.py history --limit 10
+python scripts/version_manager.py history --limit 10
 
 # Show history for specific ontology
-python version_manager.py history --ontology bfo.owl
+python scripts/version_manager.py history --ontology bfo.owl
 ```
 
 ### Generate Detailed Report
 
 ```bash
 # Create comprehensive version report
-python version_manager.py report
+python scripts/version_manager.py report
 
 # Creates version_report.md with full details
 ```
@@ -116,10 +116,10 @@ python version_manager.py report
 
 ```bash
 # Remove old backups (keep 3 most recent)
-python version_manager.py clean --keep 3
+python scripts/version_manager.py clean --keep 3
 
 # Remove all backups (dangerous!)
-python version_manager.py clean --all
+python scripts/version_manager.py clean --all
 ```
 
 ## Test vs Production Environments
@@ -140,10 +140,10 @@ The version tracking system automatically handles multiple environments:
 
 ```bash
 # Automatically detects environment from source file
-ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt python version_manager.py status
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt python scripts/version_manager.py status
 # Uses test environment
 
-ONTOLOGIES_SOURCE_FILE=ontologies_source.txt python version_manager.py status
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source.txt python scripts/version_manager.py status
 # Uses production environment
 ```
 
@@ -207,27 +207,27 @@ All download scripts automatically use version tracking:
 
 ```bash
 # Keep 5 most recent backups
-python version_manager.py clean --keep 5
+python scripts/version_manager.py clean --keep 5
 
 # Keep backups from last 30 days
-python version_manager.py clean --days 30
+python scripts/version_manager.py clean --days 30
 ```
 
 ### Selective Updates
 
 ```bash
 # Force re-download specific ontology
-python version_manager.py force-update bfo.owl
+python scripts/version_manager.py force-update bfo.owl
 
 # Update only if size changed significantly
-python version_manager.py update --size-threshold 1MB
+python scripts/version_manager.py update --size-threshold 1MB
 ```
 
 ### Integration with CI/CD
 
 ```bash
 # Check if any ontologies have updates available
-if python version_manager.py check-updates --exit-code; then
+if python scripts/version_manager.py check-updates --exit-code; then
     echo "Updates available - running pipeline"
     make run-workflow
 else
@@ -241,7 +241,7 @@ fi
 
 ```bash
 # Validate specific file
-python version_manager.py validate --ontology bfo.owl
+python scripts/version_manager.py validate --ontology bfo.owl
 
 # Re-download corrupted file
 rm ontology_data_owl/bfo.owl
@@ -252,20 +252,20 @@ make analyze-core
 
 ```bash
 # Rebuild version registry from existing files
-python version_manager.py rebuild-registry
+python scripts/version_manager.py rebuild-registry
 
 # Initialize version tracking for new files
-python version_manager.py init
+python scripts/version_manager.py init
 ```
 
 ### Backup Recovery
 
 ```bash
 # List available backups
-python version_manager.py list-backups bfo.owl
+python scripts/version_manager.py list-backups bfo.owl
 
 # Restore from backup
-python version_manager.py restore bfo.owl 2025-06-24T23:45:12
+python scripts/version_manager.py restore bfo.owl 2025-06-24T23:45:12
 ```
 
 ## Implementation Details

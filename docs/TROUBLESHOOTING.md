@@ -98,12 +98,12 @@ curl -I http://purl.obolibrary.org/obo/problem.owl
 2. **Update source file:**
 ```bash
 # Remove problematic ontologies from source file
-sed -i '/problem.owl/d' ontologies_source.txt
+sed -i '/problem.owl/d' config/ontologies_source.txt
 ```
 
 3. **Check version history:**
 ```bash
-python version_manager.py history --ontology problem.owl
+python scripts/version_manager.py history --ontology problem.owl
 ```
 
 ### File System Issues
@@ -155,7 +155,7 @@ du -sh ontology_data_owl/ outputs/
 make clean
 
 # Clean old backups
-python version_manager.py clean --keep 3
+python scripts/version_manager.py clean --keep 3
 
 # Remove temporary files
 rm -rf /tmp/pipeline_*
@@ -269,7 +269,7 @@ python scripts/analyze_core_ontologies.py
 cat ontology_versions/ontology_versions.json
 
 # Validate checksums
-python version_manager.py validate
+python scripts/version_manager.py validate
 ```
 
 2. **Rebuild version registry:**
@@ -278,7 +278,7 @@ python version_manager.py validate
 cp ontology_versions/ontology_versions.json ontology_versions.backup
 
 # Rebuild from existing files
-python version_manager.py rebuild-registry
+python scripts/version_manager.py rebuild-registry
 ```
 
 3. **Reset version tracking:**
@@ -288,13 +288,13 @@ rm -rf ontology_versions/
 mkdir ontology_versions/
 ```
 
-### Validation Failures
+### Pipeline Output Issues
 
-#### Validation Errors
+#### Missing Output Files
 
 **Symptoms:**
-- `python test_validation.py` fails
-- Missing expected output files
+- Expected output files not created
+- Pipeline appears to complete but outputs missing
 
 **Solutions:**
 
@@ -307,12 +307,13 @@ tail -f logs/cdm_ontologies.log
 grep ERROR logs/cdm_ontologies.log
 ```
 
-2. **Run validation step by step:**
+2. **Verify file integrity:**
 ```bash
-# Validate individual steps
-python test_validation.py 1
-python test_validation.py 2
-# ... continue for each step
+# Check version manager status
+python scripts/version_manager.py status
+
+# Validate checksums
+python scripts/version_manager.py validate
 ```
 
 3. **Check file existence:**
@@ -335,7 +336,7 @@ ls -la ontology_data_owl/
 ```bash
 # Force re-download specific file
 rm ontology_data_owl/problem.owl
-python version_manager.py force-update problem.owl
+python scripts/version_manager.py force-update problem.owl
 
 # Or re-download all
 make clean
@@ -345,7 +346,7 @@ make analyze-core
 2. **Check file integrity:**
 ```bash
 # Validate specific file
-python version_manager.py validate --ontology problem.owl
+python scripts/version_manager.py validate --ontology problem.owl
 
 # Check file size
 ls -lh ontology_data_owl/problem.owl
@@ -544,16 +545,17 @@ Check these log files for detailed information:
 - `ontology_versions/download_history.log` - Download history
 - `merge_memory.log` - Memory usage during merging
 
-### Validation Tools
+### Diagnostic Tools
 
 ```bash
-# Comprehensive validation
-python test_validation.py all --verbose
+# Version tracking status and validation
+python scripts/version_manager.py status
+python scripts/version_manager.py validate --verbose
 
-# Version tracking validation
-python test_validation.py version
+# Pipeline status check
+python -m cdm_ontologies status
 
-# System requirements check
+# System requirements check (if available)
 python scripts/check_requirements.py
 ```
 
