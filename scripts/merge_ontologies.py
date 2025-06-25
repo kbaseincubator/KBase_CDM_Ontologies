@@ -99,7 +99,7 @@ def merge_ontologies(
         ontology_filenames = [os.path.basename(f) for f in ontology_files]
         # Use test-specific filename in test mode
         merged_filename = 'ontologies_merged_test.txt' if test_mode else 'ontologies_merged.txt'
-        merged_list_path = os.path.join(repo_path, merged_filename)
+        merged_list_path = os.path.join(repo_path, 'config', merged_filename)
         with open(merged_list_path, 'w') as f:
             for filename in sorted(ontology_filenames):
                 f.write(f"{filename}\n")

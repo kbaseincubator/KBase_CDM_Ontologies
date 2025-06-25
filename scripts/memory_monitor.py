@@ -68,13 +68,13 @@ def get_java_processes_memory():
 
 def monitor_tool_execution(tool_name, command, log_dir, interval=15):
     """Monitor memory usage during tool execution."""
-    log_file = log_dir / f"{tool_name}_memory_log.json"
-    summary_file = log_dir / f"{tool_name}_memory_summary.txt"
+    log_file = os.path.join(log_dir, f"{tool_name}_memory_log.json")
+    summary_file = os.path.join(log_dir, f"{tool_name}_memory_summary.txt")
     
     # Create log directory if it doesn't exist
-    log_dir.mkdir(parents=True, exist_ok=True)
+    os.makedirs(log_dir, exist_ok=True)
     
-    setup_logging(log_dir / f"{tool_name}_monitor.log")
+    setup_logging(os.path.join(log_dir, f"{tool_name}_monitor.log"))
     logging.info(f"Starting memory monitoring for {tool_name}")
     logging.info(f"Command: {command}")
     
@@ -170,8 +170,8 @@ def create_utils_directory(repo_path):
     test_mode = is_test_mode()
     _, _, outputs_path, _ = get_output_directories(repo_path, test_mode)
     
-    utils_dir = outputs_path / "utils"
-    utils_dir.mkdir(parents=True, exist_ok=True)
+    utils_dir = os.path.join(outputs_path, "utils")
+    os.makedirs(utils_dir, exist_ok=True)
     
     return utils_dir
 
