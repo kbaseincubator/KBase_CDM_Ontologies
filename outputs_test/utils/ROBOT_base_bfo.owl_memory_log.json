@@ -1,0 +1,15 @@
+[
+  {
+    "timestamp": "2025-06-25T22:24:22.129343",
+    "total_memory_gb": 5.78,
+    "available_memory_gb": 4.11,
+    "used_memory_gb": 0.94,
+    "memory_percent": 28.9,
+    "swap_total_gb": 0.0,
+    "swap_used_gb": 0.0,
+    "swap_percent": 0.0,
+    "java_processes": [],
+    "total_java_memory_gb": 0,
+    "tool_name": "ROBOT_base_bfo.owl"
+  }
+]

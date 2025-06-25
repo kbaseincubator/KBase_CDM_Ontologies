@@ -83,13 +83,12 @@ outputs_test/         # Test outputs (included as examples)
 
 ## Memory Requirements
 
-All environments use production memory settings (1.5TB container limits) for consistency:
+All environments use unified memory settings (1.5TB container limits):
 
 | Mode | Ontologies | Container Memory | Processing Time |
 |------|------------|------------------|-----------------|
 | Test | 6 | 1.5TB | ~10 minutes |
-| Small | 15 | 1.5TB | ~2 hours |
-| Large | 30+ | 1.5TB | 24+ hours |
+| Production | 30+ | 1.5TB | 24+ hours |
 
 ## Documentation
 
