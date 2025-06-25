@@ -19,6 +19,28 @@ ontology_versions/backups/*.owl
 *.tar
 *.zip
 
+# Jupyter notebook checkpoints
+**/.ipynb_checkpoints/
+*-checkpoint.*
+
+# Python cache
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Temporary/backup files
+*-Copy*.py
+*-Copy*.ipynb
+*.bak
+*.backup
+*~
+*.swp
+*.swo
+
+# Test output files that should be excluded
+test_results_summary.md
+.env.test
+
 # Python
 __pycache__/
 *.py[cod]
