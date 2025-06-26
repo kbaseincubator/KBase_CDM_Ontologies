@@ -142,12 +142,17 @@ docker-build:
 .PHONY: docker-run-production
 docker-run-production: docker-build
 	@echo "Running pipeline with production dataset..."
-	@ENV_FILE=.env docker-compose run --rm cdm-ontologies
+	@ENV_FILE=.env docker-compose run --rm --user root cdm-ontologies
+
+.PHONY: docker-run-large
+docker-run-large: docker-build
+	@echo "Running pipeline with large dataset in Docker..."
+	@ENV_FILE=.env docker-compose run --rm --user root cdm-ontologies
 
 .PHONY: docker-test
 docker-test: docker-build
 	@echo "Running pipeline with test dataset in Docker..."
-	@ENV_FILE=.env.test docker-compose run --rm cdm-ontologies make test-workflow
+	@ENV_FILE=.env.test docker-compose run --rm --user root cdm-ontologies make test-workflow
 
 # Help target
 .PHONY: help
@@ -182,6 +187,7 @@ help:
 	@echo ""
 	@echo "Docker targets:"
 	@echo "  make docker-build       - Build Docker image"
+	@echo "  make docker-run-large   - Run with large dataset in Docker"
 	@echo "  make docker-run-production - Run with production dataset in Docker"
 	@echo "  make docker-test        - Run with test dataset in Docker"
 	@echo ""
