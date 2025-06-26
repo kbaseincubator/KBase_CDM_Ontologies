@@ -104,5 +104,5 @@ jobs:
           -w /home/ontology/workspace \
           -e ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt \
           -e PYTHONPATH=scripts \
-          ${{ env.REGISTRY }}/${{ steps.lowercase-test.outputs.IMAGE_NAME_LOWER }}:latest \
+          ${{ env.REGISTRY }}/${{ steps.lowercase-test.outputs.IMAGE_NAME_LOWER }}:${{ github.ref_name }} \
           python -m cdm_ontologies.cli run-all
