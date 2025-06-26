@@ -100,6 +100,7 @@ jobs:
     - name: Run Docker test pipeline
       run: |
         docker run --rm \
+          --user root \
           -v ${{ github.workspace }}:/home/ontology/workspace \
           -w /home/ontology/workspace \
           -e ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt \
