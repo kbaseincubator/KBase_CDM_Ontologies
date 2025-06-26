@@ -2,6 +2,14 @@
 
 A containerized pipeline for processing and merging biological ontologies at scale with comprehensive version tracking and multi-environment support.
 
+## Repository Locations
+
+This repository is maintained in two locations:
+- **Personal Development**: [jplfaria/KBase_CDM_Ontologies](https://github.com/jplfaria/KBase_CDM_Ontologies)
+- **KBase Organization**: [kbaseincubator/KBase_CDM_Ontologies](https://github.com/kbaseincubator/KBase_CDM_Ontologies)
+
+Both repositories are kept in sync and contain identical content.
+
 ## Overview
 
 This pipeline processes biological ontologies from sources like OBO Foundry, Gene Ontology, CHEBI, and others, creating unified knowledge bases for computational analysis. It transforms heterogeneous ontology formats into structured databases while maintaining provenance and version control.
