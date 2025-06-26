@@ -59,26 +59,125 @@ The pipeline consists of 7 sequential steps:
 6. **Extract Tables to TSV** - Exports database tables to TSV format
 7. **Create Parquet Files** - Compresses data to efficient Parquet format
 
+## KBase CDM Initial Release Ontologies
+
+The production dataset (`config/ontologies_source.txt`) includes 30+ ontologies across multiple categories:
+
+### Core Closure Ontologies (Non-Base)
+- **BFO** (Basic Formal Ontology) - Foundational upper-level ontology
+- **FOODON** - Food ontology for agricultural and nutritional data
+- **IAO** (Information Artifact Ontology) - Information and data artifacts
+- **OMO** (OBO Metadata Ontology) - Metadata and annotation standards
+- **PO** (Plant Ontology) - Plant anatomy and developmental stages
+
+### Core Closure Ontologies (Base Versions)
+- **FAO-base** - Food and Agriculture Organization terms
+- **OBI-base** (Ontology for Biomedical Investigations) - Experimental protocols
+- **PATO-base** (Phenotype and Trait Ontology) - Observable characteristics
+- **PCO-base** (Population and Community Ontology) - Population studies
+- **RO-base** (Relations Ontology) - Standardized relationships
+- **UBERON-base** - Cross-species anatomy ontology
+
+### OBO Foundry Ontologies
+- **ENVO** - Environmental conditions and exposures
+- **GO** (Gene Ontology) - Gene and protein functions
+- **NCBI Taxon** - Taxonomic classifications (>2M organisms)
+- **ChEBI** - Chemical entities of biological interest
+- **UO** (Units of Measurement Ontology) - Standardized units
+- **TAXRANK** - Taxonomic ranks and hierarchies
+- **SO** (Sequence Ontology) - Genomic and proteomic features
+
+### PyOBO Controlled Vocabularies
+- **GTDB** - Genome Taxonomy Database classifications
+- **EC codes** - Enzyme Commission functional classifications
+- **Pfam** - Protein family domains and motifs
+- **Rhea** - Biochemical reactions and pathways
+- **Credit** - Contributor role taxonomy
+- **ROR** (Research Organization Registry) - Institutional affiliations
+- **InterPro** - Protein sequence analysis and classification
+
+### In-House Ontologies
+- **SEED** - Subsystems and functional roles
+- **MetaCyc** - Metabolic pathways and enzymes
+- **KEGG** - Kyoto Encyclopedia pathway data
+- **ModelSEED** - Metabolic modeling compounds and reactions
+
 ## Configuration
 
-### Test Dataset (6 ontologies)
-- Quick execution (~10 minutes)
-- Demonstrates full pipeline
-- Uses `config/ontologies_source_test.txt`
+### Test Run Example (6 ontologies)
+
+The test dataset (`config/ontologies_source_test.txt`) provides a complete example of what users can expect from the full production run. It processes 6 representative ontologies:
+
+- **BFO, IAO** - Core foundational ontologies
+- **RO-base, PATO-base** - Essential relationships and phenotypes  
+- **ENVO** - Environmental ontology (moderate size)
+- **Credit** - Small controlled vocabulary
+
+**Test Pipeline Results** (see `outputs_test/` directory):
+
+1. **Ontology Analysis** → `core_ontologies_analysis.json`, `non_core_ontologies_analysis.json`
+2. **Downloaded Ontologies** → `ontology_data_owl_test/` (6 OWL files)
+3. **Base Ontologies** → `bfo-base.owl`, `iao-base.owl` (external axioms removed)
+4. **Merged Ontology** → `CDM_merged_ontologies.owl` (unified knowledge base)
+5. **SQLite Database** → `CDM_merged_ontologies.db` (85.5MB, 18 tables, 430K+ edges)
+6. **TSV Tables** → `tsv_tables/` (17 files, 27.7MB total)
+7. **Parquet Files** → `parquet_files/` (18 files, 2.9MB, 89.6% compression)
+
+**Memory Monitoring** → `utils/` (detailed logs for ROBOT, SemsQL operations)
+
+**Execution Time:** ~5 minutes (demonstrates full pipeline efficiency)
 
 ### Production Dataset (30+ ontologies)
-- Extended execution (hours to days)
-- Same memory allocation as test mode
-- Uses `config/ontologies_source.txt`
+
+The production run follows the same 7-step process but with the complete KBase CDM ontology collection, creating a comprehensive biological knowledge base suitable for systems biology research.
+
+- **Processing time:** Hours to days (depending on system resources)
+- **Memory allocation:** 1.5TB container limits
+- **Output location:** `outputs/` (git-ignored, user-generated)
+- **Database size:** Expected 10GB+ with millions of integrated terms
 
 ## Output Structure
 
+### Test Outputs (Included as Examples)
 ```
-outputs/              # Production outputs (git-ignored)
-outputs_test/         # Test outputs (included as examples)
-├── ontology_data_owl.owl     # Merged ontology file
-├── ontology_data_owl.db      # SQLite database
-└── tsv_tables_*/             # Exported data tables
+outputs_test/                               # Complete test run results
+├── CDM_merged_ontologies.owl              # Merged ontology (all 6 ontologies)
+├── CDM_merged_ontologies.db               # SQLite database (85.5MB)
+├── CDM_merged_ontologies-relation-graph.tsv.gz  # Relationship graph
+├── core_ontologies_analysis.json         # Step 1: Core analysis results
+├── non_core_ontologies_analysis.json     # Step 2: Non-core analysis
+├── core_onto_unique_external_*.tsv       # External term mappings
+├── tsv_tables/                            # Step 6: Database exports (17 files)
+│   ├── entailed_edge.tsv                 # 430K+ relationships
+│   ├── statements.tsv                    # 162K+ RDF statements  
+│   ├── prefix.tsv                        # 1,207 namespace prefixes
+│   └── ... (14 more tables)
+├── parquet_files/                         # Step 7: Compressed exports (18 files)
+│   ├── entailed_edge.parquet             # Efficient relationship storage
+│   ├── statements.parquet                # Compressed RDF statements
+│   └── ... (16 more files, 89.6% compression)
+└── utils/                                 # Memory monitoring logs
+    ├── ROBOT_merge_memory_summary.txt    # ROBOT performance stats
+    ├── SemsQL_make_memory_summary.txt    # Database creation stats
+    └── ... (detailed monitoring files)
+```
+
+### Production Outputs (User-Generated)
+```
+outputs/                                   # Production results (git-ignored)
+├── CDM_merged_ontologies.owl             # Complete 30+ ontology merge
+├── CDM_merged_ontologies.db              # Full production database (10GB+)
+├── tsv_tables/                           # All database tables
+├── parquet_files/                        # Compressed data exports
+└── utils/                                # Production monitoring logs
+
+ontology_data_owl/                        # Downloaded and processed ontologies
+├── *.owl                                 # Individual ontology files
+└── non-base-ontologies/                  # Unprocessed versions
+
+ontology_versions/                        # Version tracking and backups
+├── ontology_versions.json               # SHA256 checksums and metadata
+└── backups/                              # Previous versions
 ```
 
 ## Memory Requirements
