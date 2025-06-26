@@ -93,6 +93,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Create lowercase image name
+      id: lowercase-test
+      run: echo "IMAGE_NAME_LOWER=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+    
     - name: Run Docker test pipeline
       run: |
         docker run --rm \
@@ -100,5 +104,5 @@ jobs:
           -w /home/ontology/workspace \
           -e ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt \
           -e PYTHONPATH=scripts \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+          ${{ env.REGISTRY }}/${{ steps.lowercase-test.outputs.IMAGE_NAME_LOWER }}:latest \
           python -m cdm_ontologies.cli run-all
