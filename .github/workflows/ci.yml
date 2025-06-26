@@ -93,9 +93,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Create lowercase image name
+    - name: Create lowercase image name and sanitize tag
       id: lowercase-test
-      run: echo "IMAGE_NAME_LOWER=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      run: |
+        echo "IMAGE_NAME_LOWER=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+        # Sanitize tag name - replace / with - for PR refs like "1/merge"
+        echo "DOCKER_TAG=$(echo '${{ github.ref_name }}' | sed 's/\//-/g')" >> $GITHUB_OUTPUT
     
     - name: Run Docker test pipeline
       run: |
@@ -105,5 +108,5 @@ jobs:
           -w /home/ontology/workspace \
           -e ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt \
           -e PYTHONPATH=scripts \
-          ${{ env.REGISTRY }}/${{ steps.lowercase-test.outputs.IMAGE_NAME_LOWER }}:${{ github.ref_name }} \
+          ${{ env.REGISTRY }}/${{ steps.lowercase-test.outputs.IMAGE_NAME_LOWER }}:${{ steps.lowercase-test.outputs.DOCKER_TAG }} \
           python -m cdm_ontologies.cli run-all
