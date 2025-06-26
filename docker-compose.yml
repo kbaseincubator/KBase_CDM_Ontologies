@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: kbase-cdm-ontologies:latest
     container_name: cdm-ontologies-pipeline
-    user: "502:20"  # Match host user UID:GID to avoid permission issues
+    user: "${UID:-1000}:${GID:-1000}"  # Match host user UID:GID to avoid permission issues
     env_file:
       - ${ENV_FILE:-.env}
     environment:
@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
     image: kbase-cdm-ontologies:latest
     container_name: cdm-ontologies-notebook
-    user: "502:20"  # Match host user UID:GID to avoid permission issues
+    user: "${UID:-1000}:${GID:-1000}"  # Match host user UID:GID to avoid permission issues
     env_file:
       - ${ENV_FILE:-.env}
     ports:

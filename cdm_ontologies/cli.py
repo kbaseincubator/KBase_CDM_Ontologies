@@ -20,6 +20,7 @@ from merge_ontologies import merge_ontologies
 from create_semantic_sql_db import create_semantic_sql_db
 from extract_sql_tables_to_tsv import extract_sql_tables_to_tsv
 from create_parquet_files import create_parquet_files
+from resource_check import check_system_resources
 
 
 def setup_logging(verbose=False):
@@ -38,6 +39,15 @@ def setup_logging(verbose=False):
 def run_all(args):
     """Run the complete workflow."""
     print("Starting CDM Ontologies Workflow...")
+    
+    # Resource check
+    if not args.skip_resource_check and not os.getenv('SKIP_RESOURCE_CHECK', '').lower() == 'true':
+        print("\n🔍 Checking system resources...")
+        success, message = check_system_resources()
+        print(message)
+        if not success:
+            print("\n⚠️  Resource check failed. Use --skip-resource-check to override.")
+            return 1
     
     # Step 1: Analyze Core Ontologies
     print("\n1. Analyzing Core Ontologies...")
@@ -121,6 +131,8 @@ def main():
                         help='Enable verbose logging')
     parser.add_argument('--continue-on-error', action='store_true',
                         help='Continue workflow even if a step fails')
+    parser.add_argument('--skip-resource-check', action='store_true',
+                        help='Skip system resource validation before running')
     
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
     
