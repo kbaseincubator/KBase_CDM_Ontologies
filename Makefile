@@ -15,13 +15,17 @@ endif
 .PHONY: all
 all: run-workflow
 
-# Create necessary directories
+# Create necessary directories (test-mode aware)
 .PHONY: setup
 setup:
 	@echo "Setting up directories..."
-	@mkdir -p outputs
-	@mkdir -p outputs/tsv_tables  
-	@mkdir -p ontology_data_owl/non-base-ontologies
+	@if echo "$(ONTOLOGIES_SOURCE_FILE)" | grep -q "test"; then \
+		echo "Creating test mode directories..."; \
+		mkdir -p outputs_test outputs_test/tsv_tables ontology_data_owl_test/non-base-ontologies ontology_versions_test; \
+	else \
+		echo "Creating production mode directories..."; \
+		mkdir -p outputs outputs/tsv_tables ontology_data_owl/non-base-ontologies ontology_versions; \
+	fi
 	@mkdir -p logs
 
 # Install Python dependencies
@@ -92,42 +96,42 @@ clean-all: clean
 .PHONY: test-analyze-core
 test-analyze-core: setup
 	@echo "Testing core ontology analysis with test dataset..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli analyze-core
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli analyze-core
 
 .PHONY: test-analyze-non-core
 test-analyze-non-core: setup
 	@echo "Testing non-core ontology analysis..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli analyze-non-core
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli analyze-non-core
 
 .PHONY: test-create-base
 test-create-base: setup
 	@echo "Testing pseudo-base ontology creation..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-base
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-base
 
 .PHONY: test-merge
 test-merge: setup
 	@echo "Testing ontology merging..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli merge
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli merge
 
 .PHONY: test-create-db
 test-create-db: setup
 	@echo "Testing semantic SQL database creation..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-db
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-db
 
 .PHONY: test-extract-tables
 test-extract-tables: setup
 	@echo "Testing SQL table extraction..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli extract-tables
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli extract-tables
 
 .PHONY: test-create-parquet
 test-create-parquet: setup
 	@echo "Testing Parquet file creation..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-parquet
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-parquet
 
 .PHONY: test-workflow
 test-workflow: setup
 	@echo "Testing complete workflow with test dataset..."
-	@ONTOLOGIES_SOURCE_FILE=ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli run-all
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli run-all
 
 # Docker targets
 .PHONY: docker-build
@@ -135,15 +139,10 @@ docker-build:
 	@echo "Building Docker image..."
 	@docker build -t kbase-cdm-ontologies:latest .
 
-.PHONY: docker-run-small
-docker-run-small: docker-build
-	@echo "Running pipeline with small dataset..."
-	@ENV_FILE=.env.small docker-compose run --rm cdm-ontologies
-
-.PHONY: docker-run-large
-docker-run-large: docker-build
-	@echo "Running pipeline with large dataset..."
-	@ENV_FILE=.env.large docker-compose run --rm cdm-ontologies
+.PHONY: docker-run-production
+docker-run-production: docker-build
+	@echo "Running pipeline with production dataset..."
+	@ENV_FILE=.env docker-compose run --rm cdm-ontologies
 
 .PHONY: docker-test
 docker-test: docker-build
@@ -182,12 +181,10 @@ help:
 	@echo "  make clean-all       - Clean everything including downloads"
 	@echo ""
 	@echo "Docker targets:"
-	@echo "  make docker-build    - Build Docker image"
-	@echo "  make docker-run-small - Run with small dataset in Docker"
-	@echo "  make docker-run-large - Run with large dataset in Docker"
-	@echo "  make docker-test     - Run with test dataset in Docker"
+	@echo "  make docker-build       - Build Docker image"
+	@echo "  make docker-run-production - Run with production dataset in Docker"
+	@echo "  make docker-test        - Run with test dataset in Docker"
 	@echo ""
 	@echo "Environment variables:"
-	@echo "  ENV_FILE=.env.small  - Use small dataset configuration"
-	@echo "  ENV_FILE=.env.large  - Use large dataset configuration"
-	@echo "  ENV_FILE=.env.test   - Use test dataset configuration"
+	@echo "  ENV_FILE=.env      - Use production dataset configuration (default)"
+	@echo "  ENV_FILE=.env.test - Use test dataset configuration"

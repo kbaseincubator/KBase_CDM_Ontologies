@@ -8,25 +8,26 @@ This guide covers all configuration options for the CDM Ontologies Pipeline, fro
 
 The pipeline uses environment files to manage different deployment scenarios:
 
-- **`.env.test`**: Development and testing (9 ontologies, 8GB RAM)
-- **`.env.small`**: Small production (limited subset, 32GB RAM)  
-- **`.env.large`**: Full production (all ontologies, 1TB+ RAM)
+- **`.env`**: Production configuration (30+ ontologies, 1.5TB container)
+- **`.env.test`**: Test configuration (6 ontologies, same memory settings)
 
 ### Configuration File Structure
 
 ```bash
-# Memory Management
-ROBOT_JAVA_ARGS=-Xmx32g           # Java heap size for ROBOT
-_JAVA_OPTIONS=-Xmx32g             # Global Java memory limit
+# Memory Management (Unified 1TB settings)
+ROBOT_JAVA_ARGS=-Xmx1024g -XX:MaxMetaspaceSize=8g -XX:+UseG1GC
+RELATION_GRAPH_JAVA_ARGS=-Xmx1024g -XX:MaxMetaspaceSize=8g -XX:+UseG1GC
+SEMSQL_MEMORY_LIMIT=1024g
+PYTHON_MEMORY_LIMIT=1024g
 
 # Dataset Control
-ONTOLOGIES_SOURCE_FILE=config/ontologies_source.txt    # Source ontology list
-DATASET_SIZE=small                               # Size configuration
+DATASET_SIZE=test                                        # test or large
+ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt # or config/ontologies_source.txt
 
 # Processing Options
-ENABLE_REASONING=true             # Enable ontological reasoning
-ENABLE_MATERIALIZATION=true      # Materialize relationships
-MAX_ONTOLOGY_SIZE_MB=1000        # Size limit per ontology
+ENABLE_MEMORY_MONITORING=true     # Track tool memory usage
+ENABLE_TSV_EXPORT=true            # Export database to TSV
+ENABLE_PARQUET_EXPORT=true        # Create compressed Parquet files
 
 # Performance Tuning
 PARALLEL_DOWNLOADS=10            # Concurrent downloads

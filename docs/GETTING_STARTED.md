@@ -7,13 +7,13 @@ This guide will walk you through setting up and running the CDM Ontologies Pipel
 ### Option 1: Docker (Recommended)
 - Docker Engine 20.10+
 - Docker Compose v2.0+
-- 8GB+ RAM (test mode) or 1TB+ RAM (production)
+- 1.5TB+ available RAM for container allocation
 
 ### Option 2: Native Installation
 - Python 3.10+
 - Java 17+ (for ROBOT and relation-graph)
 - Make
-- 16GB+ RAM minimum
+- 1.5TB+ RAM minimum
 
 ## Quick Setup
 
@@ -32,9 +32,15 @@ cd KBase_CDM_Ontologies
 # Build the container
 make docker-build
 
-# Verify installation
+# Run test pipeline (RECOMMENDED FIRST STEP)
+# Processes 6 example ontologies in ~5 minutes
 make docker-test
+
+# Run production pipeline (30+ ontologies)
+make docker-run-production
 ```
+
+The test run is **strongly recommended** as your first step. It demonstrates the complete 7-step pipeline using a small dataset and creates example outputs in `outputs_test/` that show exactly what to expect from the full production run.
 
 #### Native Installation
 
