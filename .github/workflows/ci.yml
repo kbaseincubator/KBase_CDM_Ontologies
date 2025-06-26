@@ -93,12 +93,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Create lowercase image name and sanitize tag
+    - name: Create lowercase image name and determine tag
       id: lowercase-test
       run: |
         echo "IMAGE_NAME_LOWER=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-        # Sanitize tag name - replace / with - for PR refs like "1/merge"
-        echo "DOCKER_TAG=$(echo '${{ github.ref_name }}' | sed 's/\//-/g')" >> $GITHUB_OUTPUT
+        # Use same tag format as docker/metadata-action: pr-{number} for PRs, branch name for pushes
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          echo "DOCKER_TAG=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+        else
+          echo "DOCKER_TAG=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        fi
     
     - name: Run Docker test pipeline
       run: |
