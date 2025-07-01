@@ -76,6 +76,16 @@ UBERON\thttp://purl.obolibrary.org/obo/uberon#""")
         
         monkeypatch.setattr("shutil.which", mock_which)
         
+        # Mock os.path.exists to handle OWL file check in outputs directory
+        original_exists = os.path.exists
+        def mock_exists(path):
+            # If checking for CDM_merged_ontologies.owl in outputs_test directory, return True
+            if 'CDM_merged_ontologies.owl' in str(path) and 'outputs_test' in str(Path(path).resolve()):
+                return True
+            return original_exists(path)
+        
+        monkeypatch.setattr("os.path.exists", mock_exists)
+        
         # Mock external tool calls
         def mock_subprocess_run(*args, **kwargs):
             cmd = args[0] if args else kwargs.get('args', [])
@@ -91,11 +101,12 @@ UBERON\thttp://purl.obolibrary.org/obo/uberon#""")
                             output_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
                 elif 'semsql' in str(cmd):
                     # Mock semsql command - create database
+                    # Note: semsql is run in the outputs directory where the OWL file exists
                     for i, arg in enumerate(cmd):
                         if arg == 'make' and i + 1 < len(cmd):
+                            # The database file name is relative to current directory
                             db_file = Path(cmd[i + 1])
-                            db_file.parent.mkdir(parents=True, exist_ok=True)
-                            # Create empty file as placeholder
+                            # Create database file in current directory (which is outputs_test)
                             db_file.touch()
             
             # Return success
