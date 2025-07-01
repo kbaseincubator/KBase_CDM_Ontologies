@@ -32,6 +32,8 @@ RUN apt-get update && apt-get install -y \
     # Utilities
     vim \
     htop \
+    # For dynamic user switching
+    gosu \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Python3 as default
@@ -71,21 +73,19 @@ ENV PATH="/home/ontology/tools/bin:/home/ontology/tools:/home/ontology/tools/rel
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
-# Copy permission fix script
-COPY --chmod=755 fix-permissions.sh /usr/local/bin/fix-permissions.sh
-
-# Switch to dynamic user
-USER ${USER_ID}:${GROUP_ID}
-WORKDIR /home/ontology/workspace
+# Copy entrypoint script
+COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # Copy the application code with proper ownership
 COPY --chown=${USER_ID}:${GROUP_ID} . .
 
-# Set environment for permission fixes
-ENV HOST_UID=${USER_ID}
-ENV HOST_GID=${GROUP_ID}
+# Set working directory
+WORKDIR /home/ontology/workspace
 
 # Note: Output directories are created by host mount and script logic
+
+# Use entrypoint for dynamic user handling
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Default command
 CMD ["python", "-m", "cdm_ontologies", "--help"]

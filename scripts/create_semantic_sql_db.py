@@ -41,10 +41,15 @@ def create_semantic_sql_db(
         env['PATH'] = f"/home/ontology/.local/bin:{env.get('PATH', '')}"
         
         # Use environment variables for memory settings or set defaults
-        env['ROBOT_JAVA_ARGS'] = os.getenv('ROBOT_JAVA_ARGS', '-Xmx32g -XX:MaxMetaspaceSize=4g')
-        env['_JAVA_OPTIONS'] = os.getenv('_JAVA_OPTIONS', '-Xmx32g -XX:MaxMetaspaceSize=4g')
+        # For SemsQL, we need to ensure ROBOT inside semsql uses sufficient memory
+        robot_memory = os.getenv('ROBOT_JAVA_ARGS', '-Xmx32g -XX:MaxMetaspaceSize=4g')
+        env['ROBOT_JAVA_ARGS'] = robot_memory
+        # _JAVA_OPTIONS will be picked up by all Java processes including ROBOT inside semsql
+        # Use the same memory settings as ROBOT_JAVA_ARGS for consistency
+        env['_JAVA_OPTIONS'] = robot_memory
         
         print(f"💾 SemsQL memory settings: {env['ROBOT_JAVA_ARGS']}")
+        print(f"💾 Java options (_JAVA_OPTIONS): {env['_JAVA_OPTIONS']}")
         
         # Check if memory monitoring is enabled
         enable_monitoring = os.getenv('ENABLE_MEMORY_MONITORING', 'false').lower() == 'true'
