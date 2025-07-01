@@ -43,7 +43,7 @@ class TestCreateSemanticSQLDB:
         # Create merged OWL file
         outputs_dir = temp_repo / "outputs_test"
         outputs_dir.mkdir(exist_ok=True)
-        owl_file = outputs_dir / "cdm-ontology.simple.robot.owl"
+        owl_file = outputs_dir / "CDM_merged_ontologies.owl"
         owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
         
         # Run database creation
@@ -51,7 +51,7 @@ class TestCreateSemanticSQLDB:
         assert result == True
         
         # Check database was created
-        db_file = outputs_dir / "cdm-ontology.simple.semsql.db"
+        db_file = outputs_dir / "CDM_merged_ontologies.db"
         assert db_file.exists()
     
     def test_create_db_missing_owl_file(self, temp_repo, mock_environment, monkeypatch):
@@ -96,7 +96,7 @@ class TestCreateSemanticSQLDB:
         # Create OWL file
         outputs_dir = temp_repo / "outputs_test"
         outputs_dir.mkdir(exist_ok=True)
-        owl_file = outputs_dir / "cdm-ontology.simple.robot.owl"
+        owl_file = outputs_dir / "CDM_merged_ontologies.owl"
         owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
         
         # Run database creation
@@ -116,12 +116,11 @@ class TestCreateSemanticSQLDB:
             return MockResult()
         
         monkeypatch.setattr("subprocess.run", mock_run_fail)
-        monkeypatch.setattr("create_semantic_sql_db.check_semsql_installation", lambda: True)
         
         # Create OWL file
         outputs_dir = temp_repo / "outputs_test"
         outputs_dir.mkdir(exist_ok=True)
-        owl_file = outputs_dir / "cdm-ontology.simple.robot.owl"
+        owl_file = outputs_dir / "CDM_merged_ontologies.owl"
         owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
         
         # Run database creation

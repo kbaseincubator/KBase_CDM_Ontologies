@@ -27,8 +27,8 @@ class TestWorkflowIntegration:
         monkeypatch.setenv("ENABLE_MEMORY_MONITORING", "false")
         
         # Create required directories
-        (temp_repo / "logs").mkdir()
-        (temp_repo / "config").mkdir()
+        (temp_repo / "logs").mkdir(exist_ok=True)
+        (temp_repo / "config").mkdir(exist_ok=True)
         
         # Create test ontology source file
         source_file = temp_repo / "config" / "ontologies_source_test.txt"

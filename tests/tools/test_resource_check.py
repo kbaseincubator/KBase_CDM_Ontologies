@@ -28,6 +28,7 @@ class TestCheckSystemResources:
         # Mock disk and memory checks
         mock_disk_usage = Mock()
         mock_disk_usage.free = 50 * 1024**3  # 50GB free
+        mock_disk_usage.total = 100 * 1024**3  # 100GB total
         
         mock_memory = Mock()
         mock_memory.total = 16 * 1024**3  # 16GB total
@@ -46,6 +47,7 @@ class TestCheckSystemResources:
         # Mock sufficient resources
         mock_disk_usage = Mock()
         mock_disk_usage.free = 2000 * 1024**3  # 2TB free
+        mock_disk_usage.total = 4000 * 1024**3  # 4TB total
         
         mock_memory = Mock()
         mock_memory.total = 2000 * 1024**3  # 2TB total
@@ -64,6 +66,7 @@ class TestCheckSystemResources:
         # Mock insufficient disk
         mock_disk_usage = Mock()
         mock_disk_usage.free = 100 * 1024**3  # 100GB free (not enough)
+        mock_disk_usage.total = 500 * 1024**3  # 500GB total
         
         mock_memory = Mock()
         mock_memory.total = 2000 * 1024**3
@@ -82,6 +85,7 @@ class TestCheckSystemResources:
         # Mock insufficient memory
         mock_disk_usage = Mock()
         mock_disk_usage.free = 2000 * 1024**3
+        mock_disk_usage.total = 4000 * 1024**3
         
         mock_memory = Mock()
         mock_memory.total = 32 * 1024**3  # 32GB total (not enough)

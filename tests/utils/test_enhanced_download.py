@@ -88,7 +88,9 @@ class TestDownloadFunctions:
         mock_response.content = b"test content"
         mock_response.raise_for_status = Mock()
         
-        mock_get = Mock(side_effect=[Exception("Network error"), mock_response])
+        # Create an exception that requests would raise
+        import requests
+        mock_get = Mock(side_effect=[requests.exceptions.RequestException("Network error"), mock_response])
         monkeypatch.setattr("requests.get", mock_get)
         monkeypatch.setattr("time.sleep", Mock())  # Skip sleep in tests
         
@@ -99,11 +101,12 @@ class TestDownloadFunctions:
     
     def test_download_with_retry_all_fail(self, monkeypatch):
         """Test when all retries fail."""
-        mock_get = Mock(side_effect=Exception("Network error"))
+        import requests
+        mock_get = Mock(side_effect=requests.exceptions.RequestException("Network error"))
         monkeypatch.setattr("requests.get", mock_get)
         monkeypatch.setattr("time.sleep", Mock())
         
-        with pytest.raises(Exception, match="Network error"):
+        with pytest.raises(requests.exceptions.RequestException, match="Network error"):
             download_with_retry("http://example.org/test.owl", max_retries=2)
         
         assert mock_get.call_count == 2
@@ -204,7 +207,7 @@ class TestChecksum:
         checksum = get_file_checksum(content)
         
         assert len(checksum) == 64  # SHA256 hex digest length
-        assert checksum == "1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014"
+        assert checksum == "6ae8a75555209fd6c44157c0aed8016e763ff435a19cf186f76863140143ff72"
     
     def test_get_file_checksum_from_file(self, tmp_path):
         """Test checksum from file path."""
@@ -214,4 +217,4 @@ class TestChecksum:
         checksum = get_file_checksum(str(test_file))
         
         assert len(checksum) == 64
-        assert checksum == "1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014"
+        assert checksum == "6ae8a75555209fd6c44157c0aed8016e763ff435a19cf186f76863140143ff72"

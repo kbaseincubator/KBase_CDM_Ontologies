@@ -24,9 +24,9 @@ class TestMergeOntologies:
             owl_file = owl_dir / f"test{i}.owl"
             owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
         
-        # Create merged list file
-        merged_file = temp_repo / "ontologies_merged_test.txt"
-        merged_file.write_text("test0.owl\ntest1.owl\ntest2.owl")
+        # Create config directory for the merge to write to
+        config_dir = temp_repo / "config"
+        config_dir.mkdir(exist_ok=True)
         
         # Create prefix mapping
         prefix_file = temp_repo / "prefix_mapping.txt"
@@ -42,9 +42,9 @@ class TestMergeOntologies:
     
     def test_merge_with_missing_ontologies(self, temp_repo, mock_environment):
         """Test merge with missing ontology files."""
-        # Create merged list with non-existent files
-        merged_file = temp_repo / "ontologies_merged_test.txt"
-        merged_file.write_text("missing1.owl\nmissing2.owl")
+        # Create config directory
+        config_dir = temp_repo / "config"
+        config_dir.mkdir(exist_ok=True)
         
         # Create empty prefix mapping
         prefix_file = temp_repo / "prefix_mapping.txt"
@@ -71,9 +71,9 @@ class TestMergeOntologies:
         owl_file2 = owl_dir / "test2.owl"
         owl_file2.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
         
-        # Create merged list
-        merged_file = temp_repo / "ontologies_merged_test.txt"
-        merged_file.write_text("test1.owl\ntest2.owl")
+        # Create config directory
+        config_dir = temp_repo / "config"
+        config_dir.mkdir(exist_ok=True)
         
         # Create prefix mapping
         prefix_file = temp_repo / "prefix_mapping.txt"
@@ -92,9 +92,9 @@ class TestMergeOntologies:
             owl_file = owl_dir / onto
             owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
         
-        # Create merged list
-        merged_file = temp_repo / "ontologies_merged_test.txt"
-        merged_file.write_text("\n".join(ontologies))
+        # Create config directory  
+        config_dir = temp_repo / "config"
+        config_dir.mkdir(exist_ok=True)
         
         # Create prefix mapping
         prefix_file = temp_repo / "prefix_mapping.txt"
