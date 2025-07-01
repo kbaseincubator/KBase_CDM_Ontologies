@@ -92,6 +92,14 @@ clean:
 	@rm -rf outputs/*
 	@rm -rf logs/*
 
+# Clean Docker volumes and containers
+.PHONY: docker-clean
+docker-clean:
+	@echo "Cleaning Docker volumes and containers..."
+	@docker compose down -v 2>/dev/null || true
+	@docker volume rm kbase_cdm_ontologies_cdm-outputs kbase_cdm_ontologies_cdm-cache 2>/dev/null || true
+	@echo "Docker cleanup complete"
+
 # Clean everything including downloaded ontologies
 .PHONY: clean-all
 clean-all: clean
@@ -149,23 +157,20 @@ docker-build:
 .PHONY: docker-run-production
 docker-run-production: docker-build
 	@echo "Running pipeline with production dataset..."
+	@mkdir -p outputs .cache
 	@ENV_FILE=.env UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies
-	@echo "Fixing any permission issues..."
-	@docker run --rm -v "$(PWD):/workspace" --user root alpine:latest sh -c "chown -R $(UID):$(GID) /workspace/outputs /workspace/ontology_data_owl /workspace/logs 2>/dev/null || true"
 
 .PHONY: docker-run-prod
 docker-run-prod: docker-build
 	@echo "Running pipeline with production dataset (30+ ontologies)..."
+	@mkdir -p outputs .cache
 	@ENV_FILE=.env UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies
-	@echo "Fixing any permission issues..."
-	@docker run --rm -v "$(PWD):/workspace" --user root alpine:latest sh -c "chown -R $(UID):$(GID) /workspace/outputs /workspace/ontology_data_owl /workspace/logs 2>/dev/null || true"
 
 .PHONY: docker-run-prod-nohup
 docker-run-prod-nohup: docker-build
 	@echo "Starting production pipeline in background with nohup..."
-	@mkdir -p logs
-	@nohup bash -c 'ENV_FILE=.env UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies && \
-	docker run --rm -v "$(PWD):/workspace" --user root alpine:latest sh -c "chown -R $(UID):$(GID) /workspace/outputs /workspace/ontology_data_owl /workspace/logs 2>/dev/null || true"' \
+	@mkdir -p logs outputs .cache
+	@nohup bash -c 'ENV_FILE=.env UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies' \
 	> logs/nohup_cdm_prod.out 2>&1 &
 	@echo "Production pipeline started in background. PID: $$!"
 	@echo "Monitor progress with: make docker-prod-status"
@@ -182,9 +187,8 @@ docker-prod-status:
 .PHONY: docker-test
 docker-test: docker-build
 	@echo "Running pipeline with test dataset in Docker..."
+	@mkdir -p outputs_test .cache
 	@ENV_FILE=.env.test UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies make test-workflow
-	@echo "Fixing any permission issues..."
-	@docker run --rm -v "$(PWD):/workspace" --user root alpine:latest sh -c "chown -R $(UID):$(GID) /workspace/outputs_test /workspace/ontology_data_owl_test /workspace/logs 2>/dev/null || true"
 
 .PHONY: docker-test-nohup
 docker-test-nohup: docker-build
@@ -245,6 +249,7 @@ help:
 	@echo "  make docker-run-prod    - Run with production dataset (30+ ontologies)"
 	@echo "  make docker-run-prod-nohup - Run production in background with nohup"
 	@echo "  make docker-prod-status - Monitor production run progress"
+	@echo "  make docker-clean       - Clean Docker volumes and containers"
 	@echo ""
 	@echo "Environment variables:"
 	@echo "  ENV_FILE=.env      - Use production dataset configuration (default)"

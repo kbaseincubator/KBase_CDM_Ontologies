@@ -1,10 +1,10 @@
 [
   {
-    "timestamp": "2025-06-26T04:40:00.483101",
+    "timestamp": "2025-07-01T04:56:49.285763",
     "total_memory_gb": 5.78,
-    "available_memory_gb": 4.13,
-    "used_memory_gb": 0.91,
-    "memory_percent": 28.5,
+    "available_memory_gb": 4.16,
+    "used_memory_gb": 0.89,
+    "memory_percent": 28.1,
     "swap_total_gb": 0.0,
     "swap_used_gb": 0.0,
     "swap_percent": 0.0,

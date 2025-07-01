@@ -20,17 +20,18 @@ services:
     volumes:
       # Mount the entire workspace
       - ./:/home/ontology/workspace
-      # Separate volume for outputs to avoid conflicts
-      - cdm-outputs:/home/ontology/workspace/outputs
-      # Cache directory for downloaded ontologies
-      - cdm-cache:/home/ontology/.cache
+      # Use bind mounts instead of named volumes to avoid permission issues
+      - ./outputs:/home/ontology/workspace/outputs
+      - ./.cache:/home/ontology/.cache
     working_dir: /home/ontology/workspace
     command: >
       bash -c "
         # Create directories with correct permissions inside container
-        mkdir -p outputs outputs/tsv_tables ontology_data_owl/non-base-ontologies ontology_versions logs &&
-        # Fix any existing permission issues
-        /usr/local/bin/fix-permissions.sh &&
+        mkdir -p outputs outputs/tsv_tables outputs/utils ontology_data_owl/non-base-ontologies ontology_versions logs .cache &&
+        # Ensure all directories are owned by the current user
+        for dir in outputs ontology_data_owl ontology_versions logs .cache; do
+          [ -d "\$dir" ] && echo "Setting permissions for \$dir" || mkdir -p "\$dir"
+        done &&
         # Then run the workflow
         make run-workflow
       "
@@ -63,8 +64,8 @@ services:
       - "8888:8888"
     volumes:
       - ./:/home/ontology/workspace
-      - cdm-outputs:/home/ontology/workspace/outputs
-      - cdm-cache:/home/ontology/.cache
+      - ./outputs:/home/ontology/workspace/outputs
+      - ./.cache:/home/ontology/.cache
     working_dir: /home/ontology/workspace
     command: >
       bash -c "pip install --user notebook &&
@@ -74,6 +75,4 @@ services:
         limits:
           memory: 16G
 
-volumes:
-  cdm-outputs:
-  cdm-cache:
+# No named volumes - using bind mounts instead to avoid permission issues

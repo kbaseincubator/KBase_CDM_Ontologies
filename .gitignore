@@ -74,6 +74,9 @@ logs/nohup_cdm_test.out
 *.log
 !ontology_versions*/download_history.log
 
+# Cache directory
+.cache/
+
 # Virtual environments
 venv/
 ENV/
