@@ -187,14 +187,29 @@ def analyze_core_ontologies(repo_path):
     os.makedirs(non_base_dir, exist_ok=True)
     
     # Process main directory ontologies
-    for url in main_dir_ontologies:
-        filename = os.path.basename(url)
-        output_path = os.path.join(ontology_data_path, filename)
-        
-        print(f"Downloading core ontology: {filename}")
-        if not download_ontology(url, output_path, repo_path):
-            print(f"⚠️  Failed to download {filename}, skipping analysis")
-            continue
+    for entry in main_dir_ontologies:
+        # Check if it's a URL or a local filename
+        if entry.startswith('http://') or entry.startswith('https://'):
+            # It's a URL, download it
+            filename = os.path.basename(entry)
+            output_path = os.path.join(ontology_data_path, filename)
+            
+            print(f"Downloading core ontology: {filename}")
+            if not download_ontology(entry, output_path, repo_path):
+                print(f"⚠️  Failed to download {filename}, skipping analysis")
+                continue
+        else:
+            # It's a local filename - assume it has .owl extension
+            filename = entry if entry.endswith('.owl') else f"{entry}.owl"
+            output_path = os.path.join(ontology_data_path, filename)
+            
+            if not os.path.exists(output_path):
+                print(f"❌ Local ontology file not found: {filename}")
+                print(f"   Expected location: {output_path}")
+                print(f"   Please manually place this file in the ontology_data_owl directory")
+                continue
+            else:
+                print(f"✅ Found local ontology: {filename}")
         
         # Analyze ontology
         result = analyze_ontology(output_path)
@@ -245,14 +260,36 @@ def analyze_core_ontologies(repo_path):
             all_external_subjects.update(result['external_terms_as_subjects'])
     
     # Process non-base ontologies (go to non-base-ontologies directory)
-    for url in non_base_ontologies:
-        filename = os.path.basename(url)
-        output_path = os.path.join(non_base_dir, filename)
-        
-        print(f"Downloading non-base ontology: {filename}")
-        if not download_ontology(url, output_path, repo_path):
-            print(f"⚠️  Failed to download {filename}, skipping analysis")
-            continue
+    for entry in non_base_ontologies:
+        # Check if it's a URL or a local filename
+        if entry.startswith('http://') or entry.startswith('https://'):
+            # It's a URL, download it
+            filename = os.path.basename(entry)
+            output_path = os.path.join(non_base_dir, filename)
+            
+            print(f"Downloading non-base ontology: {filename}")
+            if not download_ontology(entry, output_path, repo_path):
+                print(f"⚠️  Failed to download {filename}, skipping analysis")
+                continue
+        else:
+            # It's a local filename - assume it has .owl extension
+            filename = entry if entry.endswith('.owl') else f"{entry}.owl"
+            # Check both in main directory and non-base directory
+            main_path = os.path.join(ontology_data_path, filename)
+            output_path = os.path.join(non_base_dir, filename)
+            
+            if os.path.exists(main_path):
+                # Copy from main directory to non-base directory
+                import shutil
+                shutil.copy2(main_path, output_path)
+                print(f"✅ Copied local ontology to non-base directory: {filename}")
+            elif os.path.exists(output_path):
+                print(f"✅ Found local ontology in non-base directory: {filename}")
+            else:
+                print(f"❌ Local ontology file not found: {filename}")
+                print(f"   Expected locations: {main_path} or {output_path}")
+                print(f"   Please manually place this file in the ontology_data_owl directory")
+                continue
         
         # Analyze ontology
         result = analyze_ontology(output_path)
