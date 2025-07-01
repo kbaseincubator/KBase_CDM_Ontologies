@@ -100,16 +100,20 @@ def run_all(args):
         if not args.continue_on_error:
             return 1
     
-    # Step 2: Analyze Non-Core Ontologies
-    timestamp_print("Step 2: Analyzing Non-Core Ontologies...")
-    try:
-        analyze_non_core_ontologies(str(repo_path))
-        timestamp_print("Step 2: Completed analyzing non-core ontologies")
-    except Exception as e:
-        logging.error(f"Failed to analyze non-core ontologies: {e}")
-        timestamp_print(f"Step 2: Failed - {e}")
-        if not args.continue_on_error:
-            return 1
+    # Step 2: Analyze Non-Core Ontologies (can be skipped)
+    skip_non_core = os.environ.get('SKIP_NON_CORE_ANALYSIS', 'false').lower() == 'true'
+    if skip_non_core:
+        timestamp_print("Step 2: Skipping Non-Core Ontology Analysis (SKIP_NON_CORE_ANALYSIS=true)")
+    else:
+        timestamp_print("Step 2: Analyzing Non-Core Ontologies...")
+        try:
+            analyze_non_core_ontologies(str(repo_path))
+            timestamp_print("Step 2: Completed analyzing non-core ontologies")
+        except Exception as e:
+            logging.error(f"Failed to analyze non-core ontologies: {e}")
+            timestamp_print(f"Step 2: Failed - {e}")
+            if not args.continue_on_error:
+                return 1
     
     # Step 3: Create Pseudo Base Ontologies
     timestamp_print("Step 3: Creating Pseudo Base Ontologies...")
