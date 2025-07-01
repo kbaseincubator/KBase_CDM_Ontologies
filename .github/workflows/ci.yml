@@ -107,10 +107,23 @@ jobs:
     - name: Run Docker test pipeline
       run: |
         docker run --rm \
-          --user root \
           -v ${{ github.workspace }}:/home/ontology/workspace \
           -w /home/ontology/workspace \
+          -e DATASET_SIZE=test \
           -e ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt \
+          -e ROBOT_JAVA_ARGS="-Xmx8g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC" \
+          -e RELATION_GRAPH_JAVA_ARGS="-Xmx8g -XX:MaxMetaspaceSize=1g -XX:+UseG1GC" \
+          -e SEMSQL_MEMORY_LIMIT=8g \
+          -e PYTHON_MEMORY_LIMIT=8g \
+          -e JAVA_PARALLEL_GC=true \
+          -e ENABLE_MEMORY_MONITORING=true \
+          -e ENABLE_TSV_EXPORT=true \
+          -e ENABLE_PARQUET_EXPORT=true \
+          -e CREATE_UTILS_LOGS=true \
+          -e SKIP_RESOURCE_CHECK=true \
+          -e SKIP_NON_CORE_ANALYSIS=true \
           -e PYTHONPATH=scripts \
+          -e HOST_UID=1001 \
+          -e HOST_GID=1001 \
           ${{ env.REGISTRY }}/${{ steps.lowercase-test.outputs.IMAGE_NAME_LOWER }}:${{ steps.lowercase-test.outputs.DOCKER_TAG }} \
           python -m cdm_ontologies.cli run-all
