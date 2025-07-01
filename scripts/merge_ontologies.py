@@ -56,8 +56,11 @@ def merge_ontologies(
         # Create full output path
         output_file = os.path.join(output_dir, output_filename)
         
-        # Set Java memory arguments for ROBOT
-        os.environ['ROBOT_JAVA_ARGS'] = '-Xmx4000G -XX:+UseParallelGC'
+        # Set Java memory arguments for ROBOT if not already set
+        if 'ROBOT_JAVA_ARGS' not in os.environ:
+            os.environ['ROBOT_JAVA_ARGS'] = '-Xmx4000G -XX:+UseParallelGC'
+        
+        print(f"💾 ROBOT memory settings: {os.environ['ROBOT_JAVA_ARGS']}")
         
         # Get list of ontology files with full paths
         ontology_files = [
