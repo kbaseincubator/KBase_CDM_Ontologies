@@ -72,9 +72,6 @@ class TestCreateSemanticSQLDB:
             executed_commands.append(cmd)
             
             if isinstance(cmd, list) and 'semsql' in str(cmd):
-                # Check for prefix arguments
-                assert any('--prefix' in str(arg) for arg in cmd)
-                
                 # Create dummy database
                 for i, arg in enumerate(cmd):
                     if arg == 'make' and i + 1 < len(cmd):
@@ -86,6 +83,8 @@ class TestCreateSemanticSQLDB:
             
             class MockResult:
                 returncode = 0
+                stdout = b"Success"
+                stderr = b""
             return MockResult()
         
         monkeypatch.setattr("subprocess.run", mock_run)

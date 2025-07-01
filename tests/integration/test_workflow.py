@@ -123,7 +123,7 @@ UBERON\thttp://purl.obolibrary.org/obo/uberon#""")
         outputs_dir = temp_repo / "outputs_test"
         assert outputs_dir.exists()
         assert (outputs_dir / "core_ontologies_analysis.json").exists()
-        assert (outputs_dir / "cdm-ontology.simple.robot.owl").exists()
+        assert (outputs_dir / "CDM_merged_ontologies.owl").exists()
     
     def test_workflow_error_handling(self, setup_test_environment, monkeypatch):
         """Test workflow handles errors appropriately."""
