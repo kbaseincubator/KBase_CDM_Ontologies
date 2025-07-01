@@ -38,9 +38,7 @@ chebi
 uberon
 """)
         
-        # Create merged list file
-        merged_file = temp_repo / "ontologies_merged_test.txt"
-        merged_file.write_text("go.owl\nchebi.owl\nuberon.owl")
+        # Note: merge_ontologies will create the merged list file in config/
         
         # Create prefix mapping
         prefix_file = temp_repo / "prefix_mapping.txt"
@@ -69,6 +67,14 @@ UBERON\thttp://purl.obolibrary.org/obo/uberon#""")
     def test_minimal_workflow(self, setup_test_environment, monkeypatch):
         """Test minimal workflow with mocked external tools."""
         temp_repo = setup_test_environment
+        
+        # Mock shutil.which to find tools
+        def mock_which(cmd):
+            if cmd in ['robot', 'semsql']:
+                return f'/usr/bin/{cmd}'
+            return None
+        
+        monkeypatch.setattr("shutil.which", mock_which)
         
         # Mock external tool calls
         def mock_subprocess_run(*args, **kwargs):
