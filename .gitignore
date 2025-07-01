@@ -1,10 +1,10 @@
 # Ontology data directories (populated during pipeline runs)
 ontology_data_owl/
-!ontology_data_owl_test/  # Keep test data for demonstration
+ontology_data_owl_test/
 
 # Output directories
 outputs/
-!outputs_test/  # Keep test outputs for demonstration
+outputs_test/
 
 # Claude guidance file (user-specific)
 CLAUDE.md
@@ -14,8 +14,8 @@ og_scripts/
 
 # Large ontology files
 ontology_versions/backups/*.owl
+ontology_versions_test/
 *.owl
-!*_test.owl
 
 # Large compressed files
 *.gz

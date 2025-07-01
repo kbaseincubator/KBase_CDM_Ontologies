@@ -26,12 +26,8 @@ services:
     working_dir: /home/ontology/workspace
     command: >
       bash -c "
-        # Create directories with correct permissions inside container
+        # Create all necessary directories
         mkdir -p outputs outputs/tsv_tables outputs/utils ontology_data_owl/non-base-ontologies ontology_versions logs .cache &&
-        # Ensure all directories are owned by the current user
-        for dir in outputs ontology_data_owl ontology_versions logs .cache; do
-          [ -d "\$dir" ] && echo "Setting permissions for \$dir" || mkdir -p "\$dir"
-        done &&
         # Then run the workflow
         make run-workflow
       "
