@@ -39,6 +39,8 @@ class TestCreateSemanticSQLDB:
             return MockResult()
         
         monkeypatch.setattr("subprocess.run", mock_run)
+        # Mock shutil.which for semsql
+        monkeypatch.setattr("shutil.which", lambda x: f"/usr/bin/{x}" if x == "semsql" else None)
         
         # Create merged OWL file
         outputs_dir = temp_repo / "outputs_test"
@@ -87,6 +89,8 @@ class TestCreateSemanticSQLDB:
             return MockResult()
         
         monkeypatch.setattr("subprocess.run", mock_run)
+        # Mock shutil.which for semsql
+        monkeypatch.setattr("shutil.which", lambda x: f"/usr/bin/{x}" if x == "semsql" else None)
         
         # Create prefix files
         prefix_dir = temp_repo / "semsql_custom_prefixes"

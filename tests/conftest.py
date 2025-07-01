@@ -89,9 +89,16 @@ def mock_robot_command(monkeypatch):
         
         return MockResult()
     
+    # Mock shutil.which to find robot
+    def mock_which(cmd):
+        if cmd == 'robot':
+            return '/usr/bin/robot'
+        return None
+    
     monkeypatch.setattr("subprocess.run", mock_run)
     monkeypatch.setattr("subprocess.Popen", lambda *args, **kwargs: type('MockPopen', (), {
         'poll': lambda self: 0,
         'wait': lambda self: 0,
         'returncode': 0
     })())
+    monkeypatch.setattr("shutil.which", mock_which)

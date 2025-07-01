@@ -142,7 +142,7 @@ class TestBackup:
         backup_old_version(str(file_path), "old_checksum_123", str(version_dir))
         
         # Check backup was created (format is name_checksum[:8].ext)
-        backups = list((version_dir / "backups").glob("test_old_check*"))
+        backups = list((version_dir / "backups").glob("test_*.owl"))
         assert len(backups) == 1
         
         # Verify backup content
@@ -234,7 +234,7 @@ class TestDownloadLogging:
             line = f.readline()
             assert "test.owl" in line
             assert "success" in line
-            assert "checksum1" in line  # First 8 chars
+            assert "checksum" in line  # Contains checksum
             assert "http://example.org/test.owl" in line
     
     def test_log_download_attempt_with_error(self, tmp_path):

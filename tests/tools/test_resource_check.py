@@ -36,6 +36,8 @@ class TestCheckSystemResources:
         
         monkeypatch.setattr("shutil.disk_usage", lambda path: mock_disk_usage)
         monkeypatch.setattr("psutil.virtual_memory", lambda: mock_memory)
+        # Mock the tool availability checks
+        monkeypatch.setattr("shutil.which", lambda x: f"/usr/bin/{x}")
         
         success, message = check_system_resources(min_memory_gb=2.0, min_disk_gb=5.0)
         
@@ -55,6 +57,8 @@ class TestCheckSystemResources:
         
         monkeypatch.setattr("shutil.disk_usage", lambda path: mock_disk_usage)
         monkeypatch.setattr("psutil.virtual_memory", lambda: mock_memory)
+        # Mock the tool availability checks
+        monkeypatch.setattr("shutil.which", lambda x: f"/usr/bin/{x}")
         
         success, message = check_system_resources(min_memory_gb=1000.0, min_disk_gb=1000.0)
         

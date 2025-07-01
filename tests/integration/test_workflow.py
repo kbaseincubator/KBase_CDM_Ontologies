@@ -50,7 +50,7 @@ UBERON\thttp://purl.obolibrary.org/obo/uberon#""")
         
         # Create test OWL files
         owl_dir = temp_repo / "ontology_data_owl_test"
-        owl_dir.mkdir()
+        owl_dir.mkdir(exist_ok=True)
         
         for name in ["go.owl", "chebi.owl", "uberon.owl"]:
             owl_file = owl_dir / name
