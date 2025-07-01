@@ -200,6 +200,27 @@ ontology_versions/                        # Version tracking and backups
 └── backups/                              # Previous versions
 ```
 
+## Project Files
+
+### Key Files in Root Directory
+
+- **`Makefile`** - Primary command interface for all operations
+- **`docker-compose.yml`** - Docker orchestration configuration
+- **`Dockerfile`** - Container build instructions with all dependencies
+- **`.env`** - Production environment configuration (not in git)
+- **`.env.test`** - Test environment configuration (not in git)
+- **`requirements.txt`** - Python dependencies
+- **`clean_run.sh`** - Script for clean pipeline runs (removes old outputs)
+- **`fix-permissions.sh`** - Fixes Docker-created file permissions
+- **`run_tests.sh`** - Runs the unit test suite
+
+### Configuration Files
+
+All configuration files are located in the `config/` directory:
+- **`ontologies_source.txt`** - List of production ontologies to process
+- **`ontologies_source_test.txt`** - Smaller list for testing (6 ontologies)
+- **`prefix_mapping.txt`** - URI prefix mappings for ontologies
+
 ## Memory Requirements
 
 All environments use unified memory settings (1.5TB container limits):
