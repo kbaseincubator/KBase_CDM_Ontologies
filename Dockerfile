@@ -65,8 +65,7 @@ RUN cargo install --git https://github.com/ontodev/rdftab.rs --root /home/ontolo
 
 # Set up environment paths
 ENV PATH="/home/ontology/tools/bin:/home/ontology/tools:/home/ontology/tools/relation-graph/bin:${PATH}"
-ENV ROBOT_JAVA_ARGS="-Xmx8g"
-ENV _JAVA_OPTIONS="-Xmx8g"
+# Memory settings are provided by .env file, not hardcoded here
 
 # Copy requirements and install Python dependencies globally as root
 COPY requirements.txt /tmp/requirements.txt
