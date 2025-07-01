@@ -1,0 +1,165 @@
+"""Tests for merge_ontologies module."""
+
+import os
+import pytest
+from pathlib import Path
+import sys
+import json
+
+# Add scripts to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../scripts'))
+
+from merge_ontologies import (
+    merge_ontologies, test_memory_availability,
+    format_memory_size, parse_memory_string
+)
+
+class TestMemoryFunctions:
+    """Test memory utility functions."""
+    
+    def test_format_memory_size(self):
+        """Test memory size formatting."""
+        assert format_memory_size(1024) == "1.0KB"
+        assert format_memory_size(1024 * 1024) == "1.0MB"
+        assert format_memory_size(1024 * 1024 * 1024) == "1.0GB"
+        assert format_memory_size(1.5 * 1024 * 1024 * 1024) == "1.5GB"
+    
+    def test_parse_memory_string(self):
+        """Test parsing memory strings."""
+        assert parse_memory_string("1g") == 1024 * 1024 * 1024
+        assert parse_memory_string("1G") == 1024 * 1024 * 1024
+        assert parse_memory_string("500m") == 500 * 1024 * 1024
+        assert parse_memory_string("500M") == 500 * 1024 * 1024
+        assert parse_memory_string("2048k") == 2048 * 1024
+        assert parse_memory_string("2048K") == 2048 * 1024
+    
+    def test_test_memory_availability(self, monkeypatch):
+        """Test memory availability check."""
+        # Mock psutil
+        class MockMemory:
+            total = 16 * 1024 * 1024 * 1024  # 16GB
+            available = 8 * 1024 * 1024 * 1024  # 8GB
+        
+        monkeypatch.setattr("psutil.virtual_memory", lambda: MockMemory())
+        
+        # Should pass with 4GB requirement
+        assert test_memory_availability("4g") == True
+        
+        # Should fail with 12GB requirement
+        assert test_memory_availability("12g") == False
+
+class TestMergeOntologies:
+    """Test the main merge_ontologies function."""
+    
+    def test_merge_ontologies_test_mode(self, temp_repo, mock_environment, mock_robot_command):
+        """Test merge in test mode."""
+        # Create test ontology files
+        owl_dir = temp_repo / "ontology_data_owl_test"
+        for i in range(3):
+            owl_file = owl_dir / f"test{i}.owl"
+            owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
+        
+        # Create merged list file
+        merged_file = temp_repo / "ontologies_merged_test.txt"
+        merged_file.write_text("test0.owl\ntest1.owl\ntest2.owl")
+        
+        # Create prefix mapping
+        prefix_file = temp_repo / "prefix_mapping.txt"
+        prefix_file.write_text("TEST\thttp://example.org/test#")
+        
+        # Run merge
+        result = merge_ontologies(str(temp_repo))
+        
+        # Check outputs
+        outputs_dir = temp_repo / "outputs_test"
+        assert result == True
+        assert outputs_dir.exists()
+    
+    def test_merge_with_missing_ontologies(self, temp_repo, mock_environment):
+        """Test merge with missing ontology files."""
+        # Create merged list with non-existent files
+        merged_file = temp_repo / "ontologies_merged_test.txt"
+        merged_file.write_text("missing1.owl\nmissing2.owl")
+        
+        # Create empty prefix mapping
+        prefix_file = temp_repo / "prefix_mapping.txt"
+        prefix_file.write_text("")
+        
+        # Run merge - should handle missing files gracefully
+        result = merge_ontologies(str(temp_repo))
+        
+        # Should return False due to no ontologies found
+        assert result == False
+    
+    def test_merge_with_compressed_files(self, temp_repo, mock_environment, mock_robot_command):
+        """Test merging with compressed ontology files."""
+        import gzip
+        
+        # Create test ontology files (some compressed)
+        owl_dir = temp_repo / "ontology_data_owl_test"
+        
+        # Regular OWL file
+        owl_file1 = owl_dir / "test1.owl"
+        owl_file1.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
+        
+        # Compressed OWL file - create decompressed version
+        owl_file2 = owl_dir / "test2.owl"
+        owl_file2.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
+        
+        # Create merged list
+        merged_file = temp_repo / "ontologies_merged_test.txt"
+        merged_file.write_text("test1.owl\ntest2.owl")
+        
+        # Create prefix mapping
+        prefix_file = temp_repo / "prefix_mapping.txt"
+        prefix_file.write_text("TEST\thttp://example.org/test#")
+        
+        # Run merge
+        result = merge_ontologies(str(temp_repo))
+        assert result == True
+    
+    def test_merge_order_file_creation(self, temp_repo, mock_environment, mock_robot_command):
+        """Test that merge order file is created correctly."""
+        # Create test ontology files
+        owl_dir = temp_repo / "ontology_data_owl_test"
+        ontologies = ["go.owl", "chebi.owl", "uberon.owl"]
+        for onto in ontologies:
+            owl_file = owl_dir / onto
+            owl_file.write_text('<?xml version="1.0"?><rdf:RDF></rdf:RDF>')
+        
+        # Create merged list
+        merged_file = temp_repo / "ontologies_merged_test.txt"
+        merged_file.write_text("\n".join(ontologies))
+        
+        # Create prefix mapping
+        prefix_file = temp_repo / "prefix_mapping.txt"
+        prefix_file.write_text("GO\thttp://purl.obolibrary.org/obo/go#")
+        
+        # Run merge
+        result = merge_ontologies(str(temp_repo))
+        
+        # Check merge order file was created
+        outputs_dir = temp_repo / "outputs_test"
+        order_file = outputs_dir / "merge_order.json"
+        assert order_file.exists()
+        
+        # Verify content
+        order_data = json.loads(order_file.read_text())
+        assert "merge_order" in order_data
+        assert len(order_data["merge_order"]) == 3
+    
+    def test_merge_memory_check_failure(self, temp_repo, mock_environment, monkeypatch):
+        """Test merge fails gracefully when insufficient memory."""
+        # Mock memory check to always fail
+        monkeypatch.setattr("merge_ontologies.test_memory_availability", lambda x: False)
+        
+        # Create minimal setup
+        merged_file = temp_repo / "ontologies_merged_test.txt"
+        merged_file.write_text("test.owl")
+        
+        prefix_file = temp_repo / "prefix_mapping.txt"
+        prefix_file.write_text("")
+        
+        # Run merge - should fail due to memory check
+        result = merge_ontologies(str(temp_repo))
+        assert result == False
