@@ -7,6 +7,7 @@ import argparse
 import logging
 import subprocess
 from pathlib import Path
+from datetime import datetime
 
 # Add scripts directory to path
 repo_path = Path(__file__).parent.parent
@@ -35,6 +36,12 @@ def setup_logging(verbose=False):
             logging.StreamHandler()
         ]
     )
+
+
+def timestamp_print(message):
+    """Print a message with timestamp prefix."""
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{timestamp}] {message}")
 
 
 def fix_docker_permissions():
@@ -71,81 +78,95 @@ def fix_docker_permissions():
 
 def run_all(args):
     """Run the complete workflow."""
-    print("Starting CDM Ontologies Workflow...")
+    timestamp_print("Starting CDM Ontologies Workflow...")
     
     # Resource check
     if not args.skip_resource_check and not os.getenv('SKIP_RESOURCE_CHECK', '').lower() == 'true':
-        print("\n🔍 Checking system resources...")
+        timestamp_print("🔍 Checking system resources...")
         success, message = check_system_resources()
         print(message)
         if not success:
-            print("\n⚠️  Resource check failed. Use --skip-resource-check to override.")
+            timestamp_print("⚠️  Resource check failed. Use --skip-resource-check to override.")
             return 1
     
     # Step 1: Analyze Core Ontologies
-    print("\n1. Analyzing Core Ontologies...")
+    timestamp_print("Step 1: Analyzing Core Ontologies...")
     try:
         analyze_core_ontologies(str(repo_path))
+        timestamp_print("Step 1: Completed analyzing core ontologies")
     except Exception as e:
         logging.error(f"Failed to analyze core ontologies: {e}")
+        timestamp_print(f"Step 1: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
     # Step 2: Analyze Non-Core Ontologies
-    print("\n2. Analyzing Non-Core Ontologies...")
+    timestamp_print("Step 2: Analyzing Non-Core Ontologies...")
     try:
         analyze_non_core_ontologies(str(repo_path))
+        timestamp_print("Step 2: Completed analyzing non-core ontologies")
     except Exception as e:
         logging.error(f"Failed to analyze non-core ontologies: {e}")
+        timestamp_print(f"Step 2: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
     # Step 3: Create Pseudo Base Ontologies
-    print("\n3. Creating Pseudo Base Ontologies...")
+    timestamp_print("Step 3: Creating Pseudo Base Ontologies...")
     try:
         create_pseudo_base_ontologies(str(repo_path))
+        timestamp_print("Step 3: Completed creating pseudo base ontologies")
     except Exception as e:
         logging.error(f"Failed to create pseudo base ontologies: {e}")
+        timestamp_print(f"Step 3: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
     # Step 4: Merge Ontologies
-    print("\n4. Merging Ontologies...")
+    timestamp_print("Step 4: Merging Ontologies...")
     try:
         if not merge_ontologies(str(repo_path)):
             raise Exception("Ontology merge failed")
+        timestamp_print("Step 4: Completed merging ontologies")
     except Exception as e:
         logging.error(f"Failed to merge ontologies: {e}")
+        timestamp_print(f"Step 4: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
     # Step 5: Create Semantic SQL Database
-    print("\n5. Creating Semantic SQL Database...")
+    timestamp_print("Step 5: Creating Semantic SQL Database...")
     try:
         if not create_semantic_sql_db(str(repo_path)):
             raise Exception("Database creation failed")
+        timestamp_print("Step 5: Completed creating semantic SQL database")
     except Exception as e:
         logging.error(f"Failed to create database: {e}")
+        timestamp_print(f"Step 5: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
     # Step 6: Extract SQL Tables to TSV
-    print("\n6. Extracting SQL Tables to TSV...")
+    timestamp_print("Step 6: Extracting SQL Tables to TSV...")
     try:
         if not extract_sql_tables_to_tsv(str(repo_path)):
             raise Exception("TSV extraction failed")
+        timestamp_print("Step 6: Completed extracting SQL tables to TSV")
     except Exception as e:
         logging.error(f"Failed to extract tables: {e}")
+        timestamp_print(f"Step 6: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
     # Step 7: Create Parquet Files
-    print("\n7. Creating Parquet Files...")
+    timestamp_print("Step 7: Creating Parquet Files...")
     try:
         if not create_parquet_files(str(repo_path)):
             raise Exception("Parquet creation failed")
+        timestamp_print("Step 7: Completed creating parquet files")
     except Exception as e:
         logging.error(f"Failed to create parquet files: {e}")
+        timestamp_print(f"Step 7: Failed - {e}")
         if not args.continue_on_error:
             return 1
     
@@ -153,7 +174,7 @@ def run_all(args):
     if 'DOCKER_CONTAINER' not in os.environ:
         fix_docker_permissions()
     
-    print("\nWorkflow completed successfully!")
+    timestamp_print("Workflow completed successfully!")
     return 0
 
 

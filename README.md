@@ -30,13 +30,25 @@ This pipeline processes biological ontologies from sources like OBO Foundry, Gen
 # Build and run with test dataset (6 ontologies)
 make docker-build
 make docker-test
+
+# Run test in background with nohup (for long processes)
+make docker-test-nohup
+
+# Monitor progress of background test run
+make docker-test-status
 ```
 
 ### Production Mode
 
 ```bash
 # Requires 1.5TB+ available RAM
-make docker-run-large
+make docker-run-prod
+
+# Run in background with nohup (for long-running processes)
+make docker-run-prod-nohup
+
+# Monitor progress of background run
+make docker-prod-status
 ```
 
 ## Installation
