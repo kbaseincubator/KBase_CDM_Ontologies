@@ -198,6 +198,11 @@ def analyze_core_ontologies(repo_path):
             if not download_ontology(entry, output_path, repo_path):
                 print(f"⚠️  Failed to download {filename}, skipping analysis")
                 continue
+                
+            # If it was a .gz file, adjust the path to the decompressed file
+            if filename.endswith('.gz'):
+                output_path = output_path[:-3]  # Remove .gz extension
+                filename = filename[:-3]
         else:
             # It's a local filename - assume it has .owl extension
             filename = entry if entry.endswith('.owl') else f"{entry}.owl"
@@ -271,6 +276,11 @@ def analyze_core_ontologies(repo_path):
             if not download_ontology(entry, output_path, repo_path):
                 print(f"⚠️  Failed to download {filename}, skipping analysis")
                 continue
+                
+            # If it was a .gz file, adjust the path to the decompressed file
+            if filename.endswith('.gz'):
+                output_path = output_path[:-3]  # Remove .gz extension
+                filename = filename[:-3]
         else:
             # It's a local filename - assume it has .owl extension
             filename = entry if entry.endswith('.owl') else f"{entry}.owl"

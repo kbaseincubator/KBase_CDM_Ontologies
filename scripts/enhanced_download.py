@@ -61,19 +61,25 @@ def download_with_retry(url, max_retries=3, timeout=30):
 def handle_compressed_file(response, output_path, url):
     """Handle compressed (.gz) file downloads."""
     if url.endswith('.gz'):
+        # If output_path ends with .gz, remove it for the decompressed file
+        if output_path.endswith('.gz'):
+            decompressed_path = output_path[:-3]  # Remove .gz extension
+        else:
+            decompressed_path = output_path
+            
         # Save compressed file temporarily
-        gz_path = output_path + '.gz'
+        gz_path = decompressed_path + '.gz'
         with open(gz_path, 'wb') as f:
             f.write(response.content)
         
         # Decompress
         with gzip.open(gz_path, 'rb') as f_in:
-            with open(output_path, 'wb') as f_out:
+            with open(decompressed_path, 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
         
         # Remove compressed file
         os.remove(gz_path)
-        print(f"✅ Downloaded and decompressed: {os.path.basename(output_path)}")
+        print(f"✅ Downloaded and decompressed: {os.path.basename(decompressed_path)}")
     else:
         with open(output_path, 'wb') as f:
             f.write(response.content)
