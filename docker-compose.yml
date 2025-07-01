@@ -25,7 +25,15 @@ services:
       # Cache directory for downloaded ontologies
       - cdm-cache:/home/ontology/.cache
     working_dir: /home/ontology/workspace
-    command: make run-workflow
+    command: >
+      bash -c "
+        # Create directories with correct permissions inside container
+        mkdir -p outputs outputs/tsv_tables ontology_data_owl/non-base-ontologies ontology_versions logs &&
+        # Fix any existing permission issues
+        /usr/local/bin/fix-permissions.sh &&
+        # Then run the workflow
+        make run-workflow
+      "
     # Ultra-high memory limits for 680GB+ peak dataset processing
     deploy:
       resources:

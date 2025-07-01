@@ -43,7 +43,7 @@ install:
 
 # Run the complete workflow
 .PHONY: run-workflow
-run-workflow: setup
+run-workflow:
 	@echo "Starting CDM Ontologies workflow..."
 	@echo "Dataset size: $(DATASET_SIZE)"
 	@echo "Java memory: $(ROBOT_JAVA_ARGS)"
@@ -51,37 +51,37 @@ run-workflow: setup
 
 # Run individual workflow steps
 .PHONY: analyze-core
-analyze-core: setup
+analyze-core:
 	@echo "Analyzing core ontologies..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli analyze-core
 
 .PHONY: analyze-non-core
-analyze-non-core: setup
+analyze-non-core:
 	@echo "Analyzing non-core ontologies..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli analyze-non-core
 
 .PHONY: create-base
-create-base: setup
+create-base:
 	@echo "Creating pseudo-base ontologies..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-base
 
 .PHONY: merge
-merge: setup
+merge:
 	@echo "Merging ontologies..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli merge
 
 .PHONY: create-db
-create-db: setup
+create-db:
 	@echo "Creating semantic SQL database..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-db
 
 .PHONY: extract-tables
-extract-tables: setup
+extract-tables:
 	@echo "Extracting SQL tables to TSV..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli extract-tables
 
 .PHONY: create-parquet
-create-parquet: setup
+create-parquet:
 	@echo "Creating Parquet files..."
 	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-parquet
 
@@ -136,7 +136,7 @@ test-create-parquet: setup
 	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli create-parquet
 
 .PHONY: test-workflow
-test-workflow: setup
+test-workflow:
 	@echo "Testing complete workflow with test dataset..."
 	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli run-all
 
