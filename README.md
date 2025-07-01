@@ -209,15 +209,16 @@ All environments use unified memory settings (1.5TB container limits):
 
 ```bash
 # Run complete workflow
-python -m cdm_ontologies run-workflow
+python -m cdm_ontologies run-all
 
 # Run individual steps
 python -m cdm_ontologies analyze-core
-python -m cdm_ontologies merge-ontologies
+python -m cdm_ontologies analyze-non-core
+python -m cdm_ontologies create-base
+python -m cdm_ontologies merge
 python -m cdm_ontologies create-db
-
-# Check pipeline status
-python -m cdm_ontologies status
+python -m cdm_ontologies extract-tables
+python -m cdm_ontologies create-parquet
 
 # Version management
 python scripts/version_manager.py status

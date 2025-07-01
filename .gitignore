@@ -9,6 +9,9 @@ outputs/
 # Claude guidance file (user-specific)
 CLAUDE.md
 
+# Original scripts directory (archived)
+og_scripts/
+
 # Large ontology files
 ontology_versions/backups/*.owl
 *.owl
