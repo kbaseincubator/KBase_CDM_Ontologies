@@ -57,19 +57,22 @@ class TestJavaProcesses:
                 'pid': 1234,
                 'name': 'java',
                 'cmdline': ['java', '-jar', 'robot.jar', 'merge'],
-                'memory_info': Mock(rss=2 * 1024**3)  # 2GB
+                'memory_info': Mock(rss=2 * 1024**3),  # 2GB
+                'username': 'testuser'
             }),
             Mock(info={
                 'pid': 5678,
                 'name': 'java',
                 'cmdline': ['java', '-jar', 'relation-graph.jar'],
-                'memory_info': Mock(rss=1 * 1024**3)  # 1GB
+                'memory_info': Mock(rss=1 * 1024**3),  # 1GB
+                'username': 'testuser'
             }),
             Mock(info={
                 'pid': 9999,
                 'name': 'python',
                 'cmdline': ['python', 'script.py'],
-                'memory_info': Mock(rss=500 * 1024**2)  # 500MB
+                'memory_info': Mock(rss=500 * 1024**2),  # 500MB
+                'username': 'testuser'
             })
         ]
         
@@ -98,7 +101,8 @@ class TestJavaProcesses:
                 'pid': 1234,
                 'name': 'java',
                 'cmdline': None,  # This was causing the TypeError
-                'memory_info': Mock(rss=1024**3)
+                'memory_info': Mock(rss=1024**3),
+                'username': 'testuser'
             })
         ]
         
@@ -127,12 +131,20 @@ class TestMonitorToolExecution:
         monkeypatch.setattr("memory_monitor.get_memory_info", lambda: {
             'used_memory_gb': 4.0,
             'available_memory_gb': 12.0,
+            'total_memory_gb': 16.0,
+            'memory_percent': 25.0,
+            'swap_total_gb': 0.0,
+            'swap_used_gb': 0.0,
+            'swap_percent': 0.0,
             'timestamp': '2024-01-01T00:00:00'
         })
         monkeypatch.setattr("memory_monitor.get_java_processes_memory", lambda: [])
         
         # Mock time.sleep to speed up test
         monkeypatch.setattr("time.sleep", lambda x: None)
+        
+        # Mock USER environment variable
+        monkeypatch.setenv("USER", "testuser")
         
         log_dir = tmp_path / "logs"
         return_code, summary = monitor_tool_execution(
