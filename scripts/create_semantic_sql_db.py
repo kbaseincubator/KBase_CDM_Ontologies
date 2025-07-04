@@ -61,17 +61,16 @@ def create_semantic_sql_db(
         # Run semsql make command with optional memory monitoring
         if enable_monitoring:
             print("🔍 Memory monitoring enabled - tracking SemsQL memory usage")
-            os.chdir(original_cwd)  # Change back for monitor script
             monitor_script = os.path.join(os.path.dirname(__file__), 'memory_monitor.py')
+            # Already in outputs_dir, so semsql can run directly
             monitor_command = [
                 'python3', monitor_script,
                 'SemsQL_make',
-                f'cd {outputs_dir} && semsql make {db_filename}',
+                f'semsql make {db_filename}',
                 repo_path,
                 str(os.getenv('MEMORY_MONITOR_INTERVAL', '15'))
             ]
-            result = subprocess.run(monitor_command, check=True, env=env)
-            os.chdir(outputs_dir)  # Change back to outputs dir for file checks
+            result = subprocess.run(monitor_command, check=True, env=env, cwd=outputs_dir)
         else:
             # Run semsql make command normally
             result = subprocess.run(
