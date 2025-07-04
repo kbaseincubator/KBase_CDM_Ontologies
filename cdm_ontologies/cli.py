@@ -257,27 +257,48 @@ def main():
     # Execute the appropriate command
     if args.command == 'run-all':
         return run_all(args)
-    elif args.command == 'analyze-core':
-        analyze_core_ontologies(str(repo_path))
-    elif args.command == 'analyze-non-core':
-        analyze_non_core_ontologies(str(repo_path))
-    elif args.command == 'create-base':
-        create_pseudo_base_ontologies(str(repo_path))
-    elif args.command == 'merge':
-        if not merge_ontologies(str(repo_path)):
-            return 1
-    elif args.command == 'create-db':
-        if not create_semantic_sql_db(str(repo_path)):
-            return 1
-    elif args.command == 'extract-tables':
-        if not extract_sql_tables_to_tsv(str(repo_path)):
-            return 1
-    elif args.command == 'create-parquet':
-        if not create_parquet_files(str(repo_path)):
-            return 1
     else:
-        parser.print_help()
-        return 1
+        # For individual commands, ensure we have a consistent output directory
+        # if not already set by a parent process
+        if 'WORKFLOW_OUTPUT_DIR' not in os.environ:
+            from enhanced_download import is_test_mode
+            test_mode = is_test_mode()
+            
+            # Use timestamp from environment if available
+            timestamp = os.environ.get('WORKFLOW_TIMESTAMP')
+            if not timestamp:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                os.environ['WORKFLOW_TIMESTAMP'] = timestamp
+            
+            outputs_base = os.path.join(repo_path, 'outputs_test' if test_mode else 'outputs')
+            run_output_dir = os.path.join(outputs_base, f'run_{timestamp}')
+            os.makedirs(run_output_dir, exist_ok=True)
+            os.environ['WORKFLOW_OUTPUT_DIR'] = run_output_dir
+            
+            print(f"📁 Output directory: {run_output_dir}")
+        
+        # Now execute the command
+        if args.command == 'analyze-core':
+            analyze_core_ontologies(str(repo_path))
+        elif args.command == 'analyze-non-core':
+            analyze_non_core_ontologies(str(repo_path))
+        elif args.command == 'create-base':
+            create_pseudo_base_ontologies(str(repo_path))
+        elif args.command == 'merge':
+            if not merge_ontologies(str(repo_path)):
+                return 1
+        elif args.command == 'create-db':
+            if not create_semantic_sql_db(str(repo_path)):
+                return 1
+        elif args.command == 'extract-tables':
+            if not extract_sql_tables_to_tsv(str(repo_path)):
+                return 1
+        elif args.command == 'create-parquet':
+            if not create_parquet_files(str(repo_path)):
+                return 1
+        else:
+            parser.print_help()
+            return 1
     
     return 0
 

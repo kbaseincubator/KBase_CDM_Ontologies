@@ -26,7 +26,10 @@ def get_output_directories(repo_path, test_mode=False):
         outputs_base = os.path.dirname(outputs_path)
     else:
         # Generate timestamp for this run
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        timestamp = os.environ.get('WORKFLOW_TIMESTAMP')
+        if not timestamp:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            os.environ['WORKFLOW_TIMESTAMP'] = timestamp
         
         if test_mode:
             outputs_base = os.path.join(repo_path, 'outputs_test')
