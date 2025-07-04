@@ -46,12 +46,13 @@ pytest tests/core/test_analyze_core_ontologies.py -v
 pytest tests/ -k "test_download" -v
 
 # Run with coverage report
-pytest tests/ --cov=scripts --cov=cdm_ontologies --cov-report=html
+pytest tests/ --cov=scripts --cov=cdm_ontologies --cov-report=html --cov-report=term-missing
 ```
 
 ### Test Coverage
 - Coverage reports are generated in `htmlcov/` directory
 - Open `htmlcov/index.html` in a browser to view detailed coverage
+- Current coverage: ~45% (71 tests passing)
 
 ## Writing Tests
 

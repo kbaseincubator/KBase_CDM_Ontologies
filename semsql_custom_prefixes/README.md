@@ -2,26 +2,31 @@
 
 ## Purpose
 
-This directory contains custom prefixes that are added to SemsQL during the Docker build process. These prefixes are essential for properly handling URIs from various biological databases in our merged ontology, which combines 30+ different ontologies.
+This directory contains custom prefixes that are added to SemsQL during the Docker build process. These prefixes are essential for properly handling URIs from various biological databases in our merged ontology, which combines 32 different ontologies from OBO Foundry, PyOBO, and in-house sources.
 
 ## Custom Prefixes
 
-The `custom_prefixes.csv` file contains the following custom prefixes:
+The `custom_prefixes.csv` file contains the following 10 custom prefix mappings:
 
 - **KEGG** (Kyoto Encyclopedia of Genes and Genomes)
-  - `kegg.reaction` - For KEGG reaction entries
-  - `kegg.pathway` - For KEGG pathway entries
+  - `kegg.reaction` → `http://www.kegg.jp/entry/` - Direct KEGG reaction entries
+  - `kegg.reaction` → `http://www.kegg.jp/find/reaction/` - KEGG reaction search
+  - `kegg.pathway` → `https://rest.kegg.jp/find/pathway/` - KEGG pathway search API
 
 - **SEED** (Model SEED Database)
-  - `seed.compound` - For SEED compound entries
-  - `seed.reaction` - For SEED reaction entries
+  - `seed.compound` → `https://modelseed.org/biochem/compounds/` - SEED compound entries
+  - `seed.reaction` → `https://modelseed.org/biochem/reactions/` - SEED reaction entries
 
 - **MetaCyc** (Metabolic Pathway Database)
-  - `metacyc.reaction` - For MetaCyc reactions
-  - `metacyc.pathway` - For MetaCyc pathways
+  - `metacyc.reaction` → `https://metacyc.org/reaction?orgid=META&id=` - MetaCyc reactions
+  - `metacyc.reaction` → `https://metacyc.org/compound?orgid=META&id=` - MetaCyc compounds
+  - `metacyc.pathway` → `http://purl.obolibrary.org/obo/metacyc.pathway/` - MetaCyc pathways
 
 - **Reactome** (Pathway Database)
-  - `Reactome` - For Reactome pathway details
+  - `Reactome` → `https://reactome.org/content/detail/` - Reactome pathway details
+
+- **OMP** (Ontology of Microbial Phenotypes)
+  - `OMP` → `http://purl.obolibrary.org/obo/OMP_` - OMP term URIs
 
 ## How It Works
 
@@ -36,7 +41,9 @@ The `custom_prefixes.csv` file contains the following custom prefixes:
 The custom prefixes are automatically integrated when:
 - Building the Docker image (`make docker-build`)
 - Running the production pipeline (`make docker-run-prod`)
-- The merged ontology contains terms from 30+ ontologies including KEGG, SEED, MetaCyc, and Reactome
+- Running the test pipeline (`make docker-test`)
+
+The merged ontology contains terms from 32 ontologies including KEGG, SEED, MetaCyc, Reactome, and many others from OBO Foundry and PyOBO sources.
 
 ## File Format
 
