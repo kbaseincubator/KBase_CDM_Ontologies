@@ -192,15 +192,18 @@ class TestUtilsDirectory:
         
         utils_dir = create_utils_directory(str(temp_repo))
         
-        assert "outputs_test/utils" in str(utils_dir)
+        assert "outputs_test/run_" in str(utils_dir)  # Check for timestamped directory
+        assert "/utils" in str(utils_dir)
         assert Path(utils_dir).exists()
     
     def test_create_utils_directory_production(self, temp_repo, monkeypatch):
         """Test creating utils directory in production mode."""
         monkeypatch.setenv("ONTOLOGIES_SOURCE_FILE", "ontologies_source.txt")
+        monkeypatch.delenv("WORKFLOW_OUTPUT_DIR", raising=False)
         
         utils_dir = create_utils_directory(str(temp_repo))
         
-        assert "outputs/utils" in str(utils_dir)
+        assert "outputs/run_" in str(utils_dir)  # Check for timestamped directory
+        assert "/utils" in str(utils_dir)
         assert "outputs_test" not in str(utils_dir)
         assert Path(utils_dir).exists()

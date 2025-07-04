@@ -32,7 +32,6 @@ def setup_logging(verbose=False):
         level=level,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler('logs/cdm_ontologies.log'),
             logging.StreamHandler()
         ]
     )
@@ -88,6 +87,25 @@ def run_all(args):
         if not success:
             timestamp_print("⚠️  Resource check failed. Use --skip-resource-check to override.")
             return 1
+    
+    # Create a single output directory for this entire run
+    from enhanced_download import is_test_mode
+    test_mode = is_test_mode()
+    
+    # Use timestamp from environment if available (for consistent logging)
+    timestamp = os.environ.get('WORKFLOW_TIMESTAMP')
+    if not timestamp:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        os.environ['WORKFLOW_TIMESTAMP'] = timestamp
+    
+    outputs_base = os.path.join(repo_path, 'outputs_test' if test_mode else 'outputs')
+    run_output_dir = os.path.join(outputs_base, f'run_{timestamp}')
+    os.makedirs(run_output_dir, exist_ok=True)
+    
+    # Set environment variables
+    os.environ['WORKFLOW_OUTPUT_DIR'] = run_output_dir
+    
+    print(f"📁 All outputs will be saved to: {run_output_dir}")
     
     # Step 1: Analyze Core Ontologies
     timestamp_print("Step 1: Analyzing Core Ontologies...")
@@ -177,6 +195,18 @@ def run_all(args):
     # Fix Docker permissions if running outside Docker
     if 'DOCKER_CONTAINER' not in os.environ:
         fix_docker_permissions()
+    
+    # Create symlink to latest run
+    latest_link = os.path.join(outputs_base, 'latest')
+    if os.path.islink(latest_link):
+        os.unlink(latest_link)
+    elif os.path.exists(latest_link):
+        if os.path.isdir(latest_link):
+            import shutil
+            shutil.rmtree(latest_link)
+        else:
+            os.remove(latest_link)
+    os.symlink(os.path.basename(run_output_dir), latest_link)
     
     timestamp_print("Workflow completed successfully!")
     return 0

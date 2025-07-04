@@ -1,16 +1,30 @@
 # Ontology data directories (populated during pipeline runs)
 ontology_data_owl/
-ontology_data_owl_test/
+# Keep example test data for documentation
+!ontology_data_owl_test/
+ontology_data_owl_test/*
+!ontology_data_owl_test/*.owl
+!ontology_data_owl_test/non-base-ontologies/
+!ontology_data_owl_test/non-base-ontologies/*.owl
 
 # Output directories
 outputs/
-outputs_test/
+# Keep example test output for documentation
+!outputs_test/
+outputs_test/*
+!outputs_test/run_20250704_001300/
+# Symlinks to latest runs
+outputs/latest
+outputs_test/latest
 
 # Claude guidance file (user-specific)
 CLAUDE.md
 
 # Original scripts directory (archived)
 og_scripts/
+
+# Archived test files from semsql_custom_prefixes
+semsql_custom_prefixes/archived/
 
 # Large ontology files
 ontology_versions/backups/*.owl
@@ -67,11 +81,14 @@ wheels/
 *.egg
 
 # Logs (but keep important logs like download_history.log)
-logs/*.log
-logs/nohup_cdm_prod.out
-logs/nohup_cdm_test.out
+!logs/
+logs/*
+!logs/cdm_ontologies_test_20250704_001300.log
+!logs/nohup_cdm_test_20250704_001300.out
 !logs/.gitkeep
+# Global log exclusion (but allow specific ones above)
 *.log
+!logs/cdm_ontologies_test_20250704_001300.log
 !ontology_versions*/download_history.log
 
 # Cache directory

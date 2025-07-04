@@ -1,0 +1,11 @@
+prefix,base
+kegg.reaction,http://www.kegg.jp/entry/
+kegg.reaction,http://www.kegg.jp/find/reaction/
+kegg.pathway,https://rest.kegg.jp/find/pathway/
+seed.compound,https://modelseed.org/biochem/compounds/
+seed.reaction,https://modelseed.org/biochem/reactions/
+metacyc.reaction,https://metacyc.org/reaction?orgid=META&id=
+metacyc.reaction,https://metacyc.org/compound?orgid=META&id=
+metacyc.pathway,http://purl.obolibrary.org/obo/metacyc.pathway/
+Reactome,https://reactome.org/content/detail/
+OMP,http://purl.obolibrary.org/obo/OMP_

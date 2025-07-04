@@ -17,6 +17,7 @@ services:
       - PYTHONUNBUFFERED=1
       - HOST_UID=${UID:-1000}
       - HOST_GID=${GID:-1000}
+      - WORKFLOW_TIMESTAMP=${WORKFLOW_TIMESTAMP}
     volumes:
       # Mount the entire workspace
       - ./:/home/ontology/workspace

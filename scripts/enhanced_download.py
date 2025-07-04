@@ -7,6 +7,7 @@ import requests
 import gzip
 import shutil
 import time
+from datetime import datetime
 from urllib.parse import urlparse
 from version_tracker import (
     should_download, get_file_checksum, backup_old_version,
@@ -16,21 +17,53 @@ from version_tracker import (
 
 def get_output_directories(repo_path, test_mode=False):
     """Get appropriate output directories based on test mode."""
+    # Check if we're in a workflow with a pre-created output directory
+    workflow_output_dir = os.environ.get('WORKFLOW_OUTPUT_DIR')
+    
+    if workflow_output_dir:
+        # Use the provided workflow output directory
+        outputs_path = workflow_output_dir
+        outputs_base = os.path.dirname(outputs_path)
+    else:
+        # Generate timestamp for this run
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        if test_mode:
+            outputs_base = os.path.join(repo_path, 'outputs_test')
+            outputs_path = os.path.join(outputs_base, f'run_{timestamp}')
+        else:
+            outputs_base = os.path.join(repo_path, 'outputs')
+            outputs_path = os.path.join(outputs_base, f'run_{timestamp}')
+        
+        # Create the timestamped run directory
+        os.makedirs(outputs_base, exist_ok=True)
+        os.makedirs(outputs_path, exist_ok=True)
+        
+        # Create a symlink to the latest run for convenience
+        latest_link = os.path.join(outputs_base, 'latest')
+        if os.path.islink(latest_link):
+            os.unlink(latest_link)
+        elif os.path.exists(latest_link):
+            # If it's not a symlink but exists, remove it
+            if os.path.isdir(latest_link):
+                shutil.rmtree(latest_link)
+            else:
+                os.remove(latest_link)
+        os.symlink(os.path.basename(outputs_path), latest_link)
+    
+    # Set up other directories
     if test_mode:
         ontology_data_path = os.path.join(repo_path, 'ontology_data_owl_test')
         non_base_dir = os.path.join(ontology_data_path, 'non-base-ontologies')
-        outputs_path = os.path.join(repo_path, 'outputs_test')
         version_dir = os.path.join(repo_path, 'ontology_versions_test')
     else:
         ontology_data_path = os.path.join(repo_path, 'ontology_data_owl')
         non_base_dir = os.path.join(ontology_data_path, 'non-base-ontologies')
-        outputs_path = os.path.join(repo_path, 'outputs')
         version_dir = os.path.join(repo_path, 'ontology_versions')
     
     # Create directories
     os.makedirs(ontology_data_path, exist_ok=True)
     os.makedirs(non_base_dir, exist_ok=True)
-    os.makedirs(outputs_path, exist_ok=True)
     os.makedirs(version_dir, exist_ok=True)
     
     return ontology_data_path, non_base_dir, outputs_path, version_dir

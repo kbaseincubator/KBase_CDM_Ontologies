@@ -20,14 +20,17 @@ from enhanced_download import (
 class TestOutputDirectories:
     """Test directory management functions."""
     
-    def test_get_output_directories_production(self, temp_repo):
+    def test_get_output_directories_production(self, temp_repo, monkeypatch):
         """Test getting production directories."""
+        # Ensure we're not in test mode
+        monkeypatch.delenv("ONTOLOGIES_SOURCE_FILE", raising=False)
+        monkeypatch.delenv("WORKFLOW_OUTPUT_DIR", raising=False)
         ontology_data, non_base, outputs, version = get_output_directories(str(temp_repo), test_mode=False)
         
         assert "ontology_data_owl_test" not in str(ontology_data)
         assert "outputs_test" not in str(outputs)
         assert str(ontology_data).endswith("ontology_data_owl")
-        assert str(outputs).endswith("outputs")
+        assert "/outputs/run_" in str(outputs)  # Check for timestamped directory
         assert str(version).endswith("ontology_versions")
         
         # Check directories were created
@@ -41,7 +44,7 @@ class TestOutputDirectories:
         ontology_data, non_base, outputs, version = get_output_directories(str(temp_repo), test_mode=True)
         
         assert str(ontology_data).endswith("ontology_data_owl_test")
-        assert str(outputs).endswith("outputs_test")
+        assert "/outputs_test/run_" in str(outputs)  # Check for timestamped directory
         assert str(version).endswith("ontology_versions_test")
         
         # Check directories were created

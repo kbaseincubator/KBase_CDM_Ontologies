@@ -124,7 +124,12 @@ class TestAnalyzeCoreOntologies:
         analyze_core_ontologies(str(temp_repo))
         
         # Check outputs were created
-        outputs_dir = temp_repo / "outputs_test"
+        outputs_base = temp_repo / "outputs_test"
+        # Find the timestamped run directory
+        run_dirs = [d for d in outputs_base.glob("run_*") if d.is_dir()]
+        assert len(run_dirs) > 0, "No run directory found"
+        outputs_dir = run_dirs[0]  # Get the first (and should be only) run directory
+        
         assert (outputs_dir / "core_ontologies_analysis.json").exists()
         assert (outputs_dir / "core_onto_unique_external_terms.tsv").exists()
         assert (outputs_dir / "core_onto_unique_external_subjects.tsv").exists()
@@ -145,7 +150,12 @@ class TestAnalyzeCoreOntologies:
         analyze_core_ontologies(str(temp_repo))
         
         # Check outputs
-        outputs_dir = temp_repo / "outputs_test"
+        outputs_base = temp_repo / "outputs_test"
+        # Find the timestamped run directory
+        run_dirs = [d for d in outputs_base.glob("run_*") if d.is_dir()]
+        assert len(run_dirs) > 0, "No run directory found"
+        outputs_dir = run_dirs[0]  # Get the first (and should be only) run directory
+        
         assert (outputs_dir / "core_ontologies_analysis.json").exists()
     
     def test_analyze_with_compressed_files(self, temp_repo, mock_environment, monkeypatch):
@@ -177,5 +187,10 @@ class TestAnalyzeCoreOntologies:
         analyze_core_ontologies(str(temp_repo))
         
         # Check that decompressed file was analyzed
-        outputs_dir = temp_repo / "outputs_test"
+        outputs_base = temp_repo / "outputs_test"
+        # Find the timestamped run directory
+        run_dirs = [d for d in outputs_base.glob("run_*") if d.is_dir()]
+        assert len(run_dirs) > 0, "No run directory found"
+        outputs_dir = run_dirs[0]  # Get the first (and should be only) run directory
+        
         assert (outputs_dir / "core_ontologies_analysis.json").exists()

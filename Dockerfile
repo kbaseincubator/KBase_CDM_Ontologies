@@ -73,6 +73,14 @@ ENV PATH="/home/ontology/tools/bin:/home/ontology/tools:/home/ontology/tools/rel
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 
+# Copy and append custom prefixes to SemsQL
+COPY semsql_custom_prefixes/custom_prefixes.csv /tmp/custom_prefixes.csv
+RUN python3 -c "import semsql; print(semsql.__file__.replace('__init__.py', 'builder/prefixes/prefixes.csv'))" > /tmp/semsql_prefix_path.txt && \
+    SEMSQL_PREFIX_PATH=$(cat /tmp/semsql_prefix_path.txt) && \
+    tail -n +2 /tmp/custom_prefixes.csv >> "${SEMSQL_PREFIX_PATH}" && \
+    echo "✅ Appended $(tail -n +2 /tmp/custom_prefixes.csv | wc -l) custom prefixes to SemsQL" && \
+    rm /tmp/custom_prefixes.csv /tmp/semsql_prefix_path.txt
+
 # Copy entrypoint script
 COPY --chmod=755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 

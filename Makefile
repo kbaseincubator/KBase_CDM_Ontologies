@@ -47,7 +47,7 @@ run-workflow:
 	@echo "Starting CDM Ontologies workflow..."
 	@echo "Dataset size: $(DATASET_SIZE)"
 	@echo "Java memory: $(ROBOT_JAVA_ARGS)"
-	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli run-all
+	@PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) $(SCRIPTS_DIR)/workflow_wrapper.py
 
 # Run individual workflow steps
 .PHONY: analyze-core
@@ -146,7 +146,7 @@ test-create-parquet: setup
 .PHONY: test-workflow
 test-workflow:
 	@echo "Testing complete workflow with test dataset..."
-	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) -m cdm_ontologies.cli run-all
+	@ONTOLOGIES_SOURCE_FILE=config/ontologies_source_test.txt PYTHONPATH=$(SCRIPTS_DIR):$(PYTHONPATH) $(PYTHON) $(SCRIPTS_DIR)/workflow_wrapper.py
 
 # Docker targets
 .PHONY: docker-build
@@ -163,23 +163,26 @@ docker-run-production: docker-build
 .PHONY: docker-run-prod
 docker-run-prod: docker-build
 	@echo "Running pipeline with production dataset (30+ ontologies)..."
-	@mkdir -p outputs .cache
+	@mkdir -p outputs logs .cache
 	@ENV_FILE=.env UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies
 
 .PHONY: docker-run-prod-nohup
 docker-run-prod-nohup: docker-build
 	@echo "Starting production pipeline in background with nohup..."
 	@mkdir -p logs outputs .cache
-	@nohup bash -c 'ENV_FILE=.env UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies' \
-	> logs/nohup_cdm_prod.out 2>&1 &
-	@echo "Production pipeline started in background. PID: $$!"
-	@echo "Monitor progress with: make docker-prod-status"
-	@echo "Or check the log file: tail -f logs/nohup_cdm_prod.out"
+	@TIMESTAMP=$$(date +%Y%m%d_%H%M%S); \
+	nohup bash -c 'ENV_FILE=.env UID=$(UID) GID=$(GID) WORKFLOW_TIMESTAMP='"$$TIMESTAMP"' docker compose run --rm cdm-ontologies' \
+	> logs/nohup_cdm_prod_$$TIMESTAMP.out 2>&1 & \
+	echo "Production pipeline started in background. PID: $$!"; \
+	echo "Monitor progress with: make docker-prod-status"; \
+	echo "Or check the log file: tail -f logs/nohup_cdm_prod_$$TIMESTAMP.out"
 
 .PHONY: docker-prod-status
 docker-prod-status:
-	@if [ -f logs/nohup_cdm_prod.out ]; then \
-		tail -f logs/nohup_cdm_prod.out; \
+	@LATEST_LOG=$$(ls -t logs/nohup_cdm_prod_*.out 2>/dev/null | head -1); \
+	if [ -n "$$LATEST_LOG" ]; then \
+		echo "Following latest production log: $$LATEST_LOG"; \
+		tail -f $$LATEST_LOG; \
 	else \
 		echo "No production run log found. Start with: make docker-run-prod-nohup"; \
 	fi
@@ -187,24 +190,27 @@ docker-prod-status:
 .PHONY: docker-test
 docker-test: docker-build
 	@echo "Running pipeline with test dataset in Docker..."
-	@mkdir -p outputs_test .cache
+	@mkdir -p outputs_test logs .cache
 	@ENV_FILE=.env.test UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies make test-workflow
 
 .PHONY: docker-test-nohup
 docker-test-nohup: docker-build
 	@echo "Starting test pipeline in background with nohup..."
 	@mkdir -p logs
-	@nohup bash -c 'ENV_FILE=.env.test UID=$(UID) GID=$(GID) docker compose run --rm cdm-ontologies make test-workflow && \
+	@TIMESTAMP=$$(date +%Y%m%d_%H%M%S); \
+	nohup bash -c 'ENV_FILE=.env.test UID=$(UID) GID=$(GID) WORKFLOW_TIMESTAMP='"$$TIMESTAMP"' docker compose run --rm cdm-ontologies make test-workflow && \
 	docker run --rm -v "$(PWD):/workspace" --user root alpine:latest sh -c "chown -R $(UID):$(GID) /workspace/outputs_test /workspace/ontology_data_owl_test /workspace/logs 2>/dev/null || true"' \
-	> logs/nohup_cdm_test.out 2>&1 &
-	@echo "Test pipeline started in background. PID: $$!"
-	@echo "Monitor progress with: make docker-test-status"
-	@echo "Or check the log file: tail -f logs/nohup_cdm_test.out"
+	> logs/nohup_cdm_test_$$TIMESTAMP.out 2>&1 & \
+	echo "Test pipeline started in background. PID: $$!"; \
+	echo "Monitor progress with: make docker-test-status"; \
+	echo "Or check the log file: tail -f logs/nohup_cdm_test_$$TIMESTAMP.out"
 
 .PHONY: docker-test-status
 docker-test-status:
-	@if [ -f logs/nohup_cdm_test.out ]; then \
-		tail -f logs/nohup_cdm_test.out; \
+	@LATEST_LOG=$$(ls -t logs/nohup_cdm_test_*.out 2>/dev/null | head -1); \
+	if [ -n "$$LATEST_LOG" ]; then \
+		echo "Following latest test log: $$LATEST_LOG"; \
+		tail -f $$LATEST_LOG; \
 	else \
 		echo "No test run log found. Start with: make docker-test-nohup"; \
 	fi

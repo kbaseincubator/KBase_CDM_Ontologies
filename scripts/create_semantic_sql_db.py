@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 import traceback
+import shutil
 from pathlib import Path
 from enhanced_download import get_output_directories, is_test_mode
 
