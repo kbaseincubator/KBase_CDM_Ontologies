@@ -28,7 +28,7 @@ services:
     command: >
       bash -c "
         # Create all necessary directories
-        mkdir -p outputs outputs/tsv_tables outputs/utils ontology_data_owl/non-base-ontologies ontology_versions logs .cache &&
+        mkdir -p outputs ontology_data_owl/non-base-ontologies ontology_versions logs .cache &&
         # Then run the workflow
         make run-workflow
       "
