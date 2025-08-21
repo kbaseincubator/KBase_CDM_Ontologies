@@ -33,10 +33,12 @@ class RunSummary:
         self.start_time = datetime.now()
         self.end_time = None
         self.status = "RUNNING"
+        self._last_reload = None
         
         # System resources at start
         memory = psutil.virtual_memory()
-        disk = psutil.disk_usage('/')
+        # Get disk usage for the output directory's mount point
+        disk = psutil.disk_usage(output_dir)
         
         self.system_info = {
             'initial_memory_available_gb': round(memory.available / (1024**3), 1),
@@ -105,9 +107,13 @@ class RunSummary:
                 self.steps[step_name]['details'] = details
         self.current_step = None
     
+    @auto_save
     def add_ontology_download(self, filename: str, status: str, size_bytes: int = 0, 
                             old_version: str = None, new_version: str = None):
         """Record an ontology download event."""
+        # Reload state to get latest updates from other processes
+        self._reload_if_needed()
+        
         self.ontology_stats['total_processed'] += 1
         
         download_info = {
@@ -129,6 +135,7 @@ class RunSummary:
         elif status == 'remote_changed':
             self.ontology_stats['remote_changes_detected'].append(download_info)
     
+    @auto_save
     def add_version_change(self, filename: str, old_checksum: str, new_checksum: str):
         """Record a version change."""
         self.version_changes['files_updated'].append({
@@ -137,21 +144,25 @@ class RunSummary:
             'new_checksum': new_checksum[:8] if new_checksum else 'N/A'
         })
     
+    @auto_save
     def add_backup(self, size_bytes: int):
         """Record backup creation."""
         self.version_changes['backups_created'] += 1
         self.version_changes['backup_size_gb'] += size_bytes / (1024**3)
     
+    @auto_save
     def update_memory_usage(self, usage_gb: float, usage_percent: float):
         """Update peak memory usage if current is higher."""
         if usage_gb > self.system_info['peak_memory_usage_gb']:
             self.system_info['peak_memory_usage_gb'] = round(usage_gb, 1)
             self.system_info['peak_memory_percent'] = round(usage_percent, 1)
     
+    @auto_save
     def add_processing_result(self, key: str, value: Any):
         """Add a processing result metric."""
         self.processing_results[key] = value
     
+    @auto_save
     def add_output_file(self, name: str, path: str, size_bytes: int = 0):
         """Record an output file."""
         self.output_files[name] = {
@@ -159,6 +170,7 @@ class RunSummary:
             'size_gb': round(size_bytes / (1024**3), 2) if size_bytes else 0
         }
     
+    @auto_save
     def add_error(self, error_msg: str):
         """Add an error message."""
         self.issues['errors'].append({
@@ -167,6 +179,7 @@ class RunSummary:
             'step': self.current_step
         })
     
+    @auto_save
     def add_warning(self, warning_msg: str):
         """Add a warning message."""
         self.issues['warnings'].append({
@@ -175,6 +188,7 @@ class RunSummary:
             'step': self.current_step
         })
     
+    @auto_save
     def finalize(self, status: str = 'SUCCESS'):
         """Finalize the summary."""
         self.end_time = datetime.now()
@@ -182,7 +196,7 @@ class RunSummary:
         
         # Get final system resources
         memory = psutil.virtual_memory()
-        disk = psutil.disk_usage('/')
+        disk = psutil.disk_usage(self.output_dir)
         self.system_info['final_memory_available_gb'] = round(memory.available / (1024**3), 1)
         self.system_info['final_disk_available_gb'] = round(disk.free / (1024**3), 1)
     
@@ -346,6 +360,8 @@ class RunSummary:
         """Save current state to temporary file for inter-process communication."""
         summary_path = os.environ.get('RUN_SUMMARY_PATH')
         if summary_path:
+            # Ensure directory exists
+            os.makedirs(os.path.dirname(summary_path), exist_ok=True)
             state = {
                 'run_id': self.run_id,
                 'output_dir': self.output_dir,
@@ -360,10 +376,14 @@ class RunSummary:
                 'version_changes': self.version_changes,
                 'processing_results': self.processing_results,
                 'issues': self.issues,
-                'output_files': self.output_files
+                'output_files': self.output_files,
+                'last_modified': datetime.now().isoformat()
             }
-            with open(summary_path, 'w') as f:
+            # Write atomically to avoid corruption
+            temp_path = summary_path + '.tmp'
+            with open(temp_path, 'w') as f:
                 json.dump(state, f, indent=2, default=str)
+            os.replace(temp_path, summary_path)
     
     @classmethod
     def load_state(cls, summary_path: str) -> 'RunSummary':
@@ -384,8 +404,34 @@ class RunSummary:
         summary.processing_results = state['processing_results']
         summary.issues = state['issues']
         summary.output_files = state['output_files']
+        summary._last_reload = datetime.now()
         
         return summary
+    
+    def _reload_if_needed(self):
+        """Reload state from file if it has been modified by another process."""
+        summary_path = os.environ.get('RUN_SUMMARY_PATH')
+        if summary_path and os.path.exists(summary_path):
+            try:
+                # Check if file has been modified since last reload
+                file_mtime = datetime.fromtimestamp(os.path.getmtime(summary_path))
+                if not self._last_reload or file_mtime > self._last_reload:
+                    # Reload state
+                    with open(summary_path, 'r') as f:
+                        state = json.load(f)
+                    
+                    # Update our state with the loaded data
+                    self.system_info = state['system_info']
+                    self.steps = state['steps']
+                    self.ontology_stats = state['ontology_stats']
+                    self.version_changes = state['version_changes']
+                    self.processing_results = state['processing_results']
+                    self.issues = state['issues']
+                    self.output_files = state['output_files']
+                    self._last_reload = datetime.now()
+            except Exception:
+                # If reload fails, continue with current state
+                pass
 
 
 # Global instance for easy access
@@ -395,21 +441,19 @@ def get_summary() -> Optional[RunSummary]:
     """Get the current summary instance, loading from file if needed."""
     global _summary_instance
     
-    # If we already have an instance, return it
-    if _summary_instance:
-        return _summary_instance
-    
-    # Try to load from environment path
+    # Always try to load from file first to get latest state
     summary_path = os.environ.get('RUN_SUMMARY_PATH')
     if summary_path and os.path.exists(summary_path):
         try:
+            # Always reload to get latest state from other processes
             _summary_instance = RunSummary.load_state(summary_path)
             return _summary_instance
         except Exception:
-            # If loading fails, return None
+            # If loading fails, return existing instance or None
             pass
     
-    return None
+    # Return existing instance if no file available
+    return _summary_instance
 
 def init_summary(run_id: str, output_dir: str, mode: str = "PRODUCTION") -> RunSummary:
     """Initialize a new summary instance."""
@@ -418,5 +462,8 @@ def init_summary(run_id: str, output_dir: str, mode: str = "PRODUCTION") -> RunS
     
     # Save summary file path to environment for child processes
     os.environ['RUN_SUMMARY_PATH'] = os.path.join(output_dir, '.run_summary_temp.json')
+    
+    # Immediately save state so child processes can access it
+    _summary_instance.save_state()
     
     return _summary_instance
